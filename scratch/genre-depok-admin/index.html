@@ -1,0 +1,2010 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIAT Forum GenRe Depok — Sistem Administrasi Terpadu</title>
+  <meta name="description" content="Sistem Administrasi Terpadu Forum GenRe Depok — Dashboard resmi pengelolaan kegiatan, PIK-R, surat-menyurat, disposisi, dan keuangan." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F8FAFC;
+      --bg-tertiary: #F1F5F9;
+      --border: #E2E8F0;
+      --border-strong: #CBD5E1;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent-blue: #1D4ED8;
+      --accent-blue-light: #EFF6FF;
+      --accent-blue-mid: #3B82F6;
+      --accent-green: #10B981;
+      --accent-green-light: #ECFDF5;
+      --accent-amber: #F59E0B;
+      --accent-amber-light: #FFFBEB;
+      --accent-red: #EF4444;
+      --accent-red-light: #FEF2F2;
+      --sidebar-w: 240px;
+      --header-h: 56px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+      --shadow-lg: 0 10px 30px rgba(0,0,0,0.12);
+    }
+    html, body { height: 100%; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-primary); background: var(--bg-secondary); }
+    #root { display: flex; height: 100%; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: var(--sidebar-w); min-width: var(--sidebar-w);
+      background: var(--text-primary);
+      display: flex; flex-direction: column;
+      height: 100vh; overflow-y: auto;
+      position: sticky; top: 0;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar-logo-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 10px;
+      background: var(--accent-blue);
+      color: white; font-size: 10px; font-weight: 700; letter-spacing: 0.8px;
+    }
+    .sidebar-logo-title {
+      margin-top: 10px;
+      font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.9); letter-spacing: 0.3px; line-height: 1.4;
+    }
+    .sidebar-logo-sub { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+    .sidebar-section { padding: 16px 12px 4px; font-size: 9px; font-weight: 700; letter-spacing: 1.2px; color: rgba(255,255,255,0.25); text-transform: uppercase; }
+    .sidebar-nav { list-style: none; padding: 0 8px; }
+    .sidebar-nav li { margin-bottom: 2px; }
+    .sidebar-nav-btn {
+      width: 100%; display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px;
+      background: transparent; border: none; cursor: pointer;
+      color: rgba(255,255,255,0.55); font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;
+      text-align: left; border-radius: 3px;
+      transition: all 0.15s ease;
+    }
+    .sidebar-nav-btn:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+    .sidebar-nav-btn.active { background: var(--accent-blue); color: white; font-weight: 600; }
+    .sidebar-nav-btn .nav-icon { font-size: 14px; flex-shrink: 0; opacity: 0.8; }
+    .sidebar-nav-btn.active .nav-icon { opacity: 1; }
+    .sidebar-footer {
+      margin-top: auto; padding: 16px; border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 11px; color: rgba(255,255,255,0.3);
+    }
+    .sidebar-user { display: flex; align-items: center; gap: 10px; }
+    .sidebar-avatar {
+      width: 30px; height: 30px;
+      background: var(--accent-blue); border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: white;
+    }
+    .sidebar-user-name { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.75); }
+    .sidebar-user-role { font-size: 10px; color: rgba(255,255,255,0.3); }
+
+    /* MAIN CONTENT */
+    .main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+    .topbar {
+      height: var(--header-h); background: var(--bg-primary);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; flex-shrink: 0;
+    }
+    .topbar-title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+    .topbar-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+    .topbar-badge {
+      padding: 4px 10px; background: var(--accent-green-light);
+      color: var(--accent-green); font-size: 10px; font-weight: 700;
+      border-radius: 2px; letter-spacing: 0.3px;
+    }
+    .content-area { flex: 1; overflow-y: auto; padding: 24px; }
+
+    /* CARD */
+    .card {
+      background: var(--bg-primary); border: 1px solid var(--border);
+      border-radius: 3px; overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .card-header {
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-title { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+    .card-subtitle { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .card-body { padding: 18px; }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border: none; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+      border-radius: 2px; transition: all 0.15s ease; white-space: nowrap;
+    }
+    .btn-primary { background: var(--accent-blue); color: white; }
+    .btn-primary:hover { background: #1e40af; }
+    .btn-secondary { background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: var(--border); }
+    .btn-success { background: var(--accent-green); color: white; }
+    .btn-success:hover { background: #059669; }
+    .btn-danger { background: var(--accent-red); color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--bg-tertiary); }
+    .btn-sm { padding: 4px 10px; font-size: 11px; }
+    .btn-xs { padding: 2px 8px; font-size: 10px; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* BADGES */
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 8px; font-size: 10px; font-weight: 700; border-radius: 2px; letter-spacing: 0.3px;
+    }
+    .badge-blue { background: var(--accent-blue-light); color: var(--accent-blue); }
+    .badge-green { background: var(--accent-green-light); color: var(--accent-green); }
+    .badge-amber { background: var(--accent-amber-light); color: var(--accent-amber); }
+    .badge-red { background: var(--accent-red-light); color: var(--accent-red); }
+    .badge-gray { background: var(--bg-tertiary); color: var(--text-secondary); }
+
+    /* FORM ELEMENTS */
+    .form-group { margin-bottom: 14px; }
+    .form-label { display: block; font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-control {
+      width: 100%; padding: 8px 11px;
+      border: 1px solid var(--border); border-radius: 2px;
+      background: var(--bg-primary); color: var(--text-primary);
+      font-family: 'Inter', sans-serif; font-size: 12px;
+      transition: border-color 0.15s ease; outline: none;
+    }
+    .form-control:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(29,78,216,0.1); }
+    .form-control::placeholder { color: var(--text-muted); }
+    textarea.form-control { resize: vertical; min-height: 80px; }
+    select.form-control { cursor: pointer; }
+
+    /* TABLE */
+    .table-wrapper { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      padding: 10px 14px; text-align: left;
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;
+      color: var(--text-muted); background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+    tbody tr:hover { background: var(--bg-secondary); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody td { padding: 11px 14px; font-size: 12px; color: var(--text-primary); vertical-align: middle; }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.55);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000; backdrop-filter: blur(2px);
+    }
+    .modal {
+      background: var(--bg-primary); border-radius: 3px;
+      box-shadow: var(--shadow-lg); width: 520px; max-width: 95vw; max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-title { font-size: 14px; font-weight: 700; }
+    .modal-close { background: none; border: none; cursor: pointer; font-size: 18px; color: var(--text-muted); line-height: 1; }
+    .modal-body { padding: 20px; }
+    .modal-footer { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
+
+    /* DROPZONE */
+    .dropzone {
+      border: 2px dashed var(--border-strong); border-radius: 3px;
+      padding: 32px; text-align: center;
+      cursor: pointer; transition: all 0.2s ease;
+      background: var(--bg-secondary);
+    }
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--accent-blue); background: var(--accent-blue-light);
+    }
+    .dropzone-icon { font-size: 32px; margin-bottom: 10px; opacity: 0.5; }
+    .dropzone-text { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+    .dropzone-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+    /* METRIC CARDS */
+    .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+    .metric-card { background: var(--bg-primary); border: 1px solid var(--border); border-radius: 3px; padding: 16px 18px; }
+    .metric-label { font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.8px; text-transform: uppercase; }
+    .metric-value { font-size: 22px; font-weight: 800; color: var(--text-primary); margin-top: 4px; letter-spacing: -0.5px; }
+    .metric-change { font-size: 10px; margin-top: 4px; }
+    .metric-accent-left { border-left: 3px solid var(--accent-blue); }
+    .metric-accent-green { border-left: 3px solid var(--accent-green); }
+    .metric-accent-amber { border-left: 3px solid var(--accent-amber); }
+    .metric-accent-red { border-left: 3px solid var(--accent-red); }
+
+    /* CALENDAR */
+    .cal-grid { display: grid; grid-template-columns: 1fr 300px; gap: 16px; }
+    .cal-month-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .cal-month-title { font-size: 16px; font-weight: 800; }
+    .cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; margin-bottom: 1px; }
+    .cal-weekday { text-align: center; padding: 8px 4px; font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; background: var(--bg-secondary); }
+    .cal-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--border); }
+    .cal-day {
+      background: var(--bg-primary); min-height: 90px; padding: 6px 8px;
+      cursor: pointer; transition: background 0.1s;
+      position: relative; overflow: hidden;
+    }
+    .cal-day:hover { background: var(--bg-secondary); }
+    .cal-day.selected { background: var(--accent-blue-light); }
+    .cal-day.other-month { background: var(--bg-secondary); }
+    .cal-day.today .cal-day-num { background: var(--text-primary); color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; }
+    .cal-day-num { font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+    .cal-day.other-month .cal-day-num { color: var(--text-muted); }
+    .cal-event-tag { display: block; padding: 2px 5px; font-size: 9px; font-weight: 700; border-radius: 1px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cal-event-blue { background: #3B82F6; color: white; }
+    .cal-event-green { background: #10B981; color: white; }
+    .cal-event-amber { background: #F59E0B; color: white; }
+    .cal-panel { }
+    .cal-panel-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; color: var(--text-muted); font-size: 12px; text-align: center; }
+
+    /* WIZARD */
+    .wizard-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; min-height: 600px; }
+    .wizard-steps { display: flex; flex-direction: column; gap: 0; margin-bottom: 20px; }
+    .wizard-step-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; position: relative; }
+    .wizard-step-item:not(:last-child)::after { content: ''; position: absolute; left: 15px; top: 40px; bottom: 0; width: 1px; background: var(--border); }
+    .wizard-step-num { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; border: 2px solid var(--border); color: var(--text-muted); }
+    .wizard-step-num.active { border-color: var(--accent-blue); background: var(--accent-blue); color: white; }
+    .wizard-step-num.done { border-color: var(--accent-green); background: var(--accent-green); color: white; }
+    .wizard-step-label { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-top: 5px; }
+    .wizard-step-label.active { color: var(--accent-blue); }
+    .wizard-step-label.done { color: var(--accent-green); }
+
+    /* DOCUMENT PREVIEW */
+    .doc-preview {
+      background: white; border: 1px solid var(--border);
+      font-family: 'Times New Roman', serif; font-size: 11px; line-height: 1.6;
+      padding: 32px; min-height: 500px; color: #1a1a1a;
+    }
+    .doc-preview-header { text-align: center; border-bottom: 3px double #1a1a1a; padding-bottom: 12px; margin-bottom: 16px; }
+    .doc-preview-org { font-size: 13px; font-weight: 700; letter-spacing: 1px; }
+    .doc-preview-sub { font-size: 10px; }
+    .doc-preview-title { font-size: 14px; font-weight: 700; text-align: center; margin: 14px 0; text-decoration: underline; }
+    .doc-preview-section { margin-bottom: 14px; }
+    .doc-preview-section-title { font-weight: 700; margin-bottom: 6px; }
+
+    /* DISPOSITION GRID */
+    .disp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .disp-member {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 12px; border: 1px solid var(--border); border-radius: 2px;
+      background: var(--bg-primary);
+    }
+    .disp-member-name { font-size: 11px; font-weight: 600; }
+    .disp-member-role { font-size: 10px; color: var(--text-muted); }
+    .toggle-btn {
+      padding: 4px 10px; border: none; border-radius: 2px; cursor: pointer;
+      font-size: 10px; font-weight: 700; font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+    }
+    .toggle-hadir { background: var(--accent-green-light); color: var(--accent-green); }
+    .toggle-hadir:hover { background: var(--accent-green); color: white; }
+    .toggle-absent { background: var(--accent-red-light); color: var(--accent-red); }
+    .toggle-absent:hover { background: var(--accent-red); color: white; }
+
+    /* LETTER PREVIEW */
+    .letter-preview {
+      background: white; border: 1px solid var(--border);
+      font-family: 'Times New Roman', serif; font-size: 11.5px; line-height: 1.8;
+      padding: 40px; color: #1a1a1a; min-height: 500px;
+      position: relative;
+    }
+    .letter-header { display: flex; align-items: center; gap: 16px; border-bottom: 2px solid #1a1a1a; padding-bottom: 12px; margin-bottom: 20px; }
+    .letter-logo { width: 60px; height: 60px; border: 2px solid #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; flex-shrink: 0; }
+    .letter-org-name { font-size: 14px; font-weight: 700; letter-spacing: 1px; }
+    .letter-org-sub { font-size: 10px; line-height: 1.4; }
+    .letter-ref-table { width: 100%; margin-bottom: 20px; }
+    .letter-ref-table td { padding: 2px 4px; vertical-align: top; }
+    .letter-body { margin-bottom: 24px; }
+    .letter-sig-area { display: flex; justify-content: flex-end; }
+    .letter-sig-block { text-align: center; }
+    .letter-sig-img {
+      width: 100px; height: 50px; margin: 8px auto;
+      border-bottom: 1px solid #1a1a1a;
+      display: flex; align-items: center; justify-content: center;
+      font-style: italic; color: #666; font-size: 10px;
+    }
+    .sig-injected { color: var(--accent-blue); font-style: italic; font-size: 11px; border: 1px dashed var(--accent-blue); padding: 4px 10px; }
+    .acc-stamp {
+      position: absolute; top: 50px; right: 40px;
+      border: 3px solid var(--accent-red); color: var(--accent-red);
+      padding: 4px 12px; font-weight: 900; font-size: 18px; letter-spacing: 2px;
+      transform: rotate(-15deg); border-radius: 2px; opacity: 0.75;
+      pointer-events: none;
+    }
+
+    /* TABS */
+    .tab-bar { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+    .tab-btn { padding: 10px 18px; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; }
+    .tab-btn:hover { color: var(--text-primary); }
+    .tab-btn.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+
+    /* GRID UTILS */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    .flex { display: flex; }
+    .flex-center { display: flex; align-items: center; }
+    .gap-2 { gap: 8px; }
+    .gap-3 { gap: 12px; }
+    .gap-4 { gap: 16px; }
+    .mt-1 { margin-top: 4px; }
+    .mt-2 { margin-top: 8px; }
+    .mt-3 { margin-top: 12px; }
+    .mt-4 { margin-top: 16px; }
+    .mb-2 { margin-bottom: 8px; }
+    .mb-3 { margin-bottom: 12px; }
+    .mb-4 { margin-bottom: 16px; }
+    .font-bold { font-weight: 700; }
+    .font-mono { font-family: 'Courier New', monospace; }
+    .text-muted { color: var(--text-muted); }
+    .text-sm { font-size: 11px; }
+    .text-xs { font-size: 10px; }
+    .w-full { width: 100%; }
+    .divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+    /* LOADING PULSE */
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .pulse { animation: pulse 1.2s ease-in-out infinite; }
+
+    /* FADE IN */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn 0.25s ease-out; }
+
+    /* Ledger */
+    .ledger-row-income td { color: var(--accent-green); }
+    .ledger-row-expense td { color: var(--text-primary); }
+    .ledger-row-expense .amount-cell { color: var(--accent-red); }
+
+    /* Info row in letter */
+    .info-row { display: flex; gap: 8px; align-items: baseline; margin-bottom: 2px; }
+    .info-label { font-size: 10px; font-weight: 700; color: var(--text-muted); min-width: 80px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Separator */
+    .sep { color: var(--border-strong); margin: 0 6px; }
+
+    /* Approval queue item */
+    .approval-item { padding: 12px 16px; border: 1px solid var(--border); border-radius: 2px; background: var(--bg-primary); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .approval-item.acc { border-color: var(--accent-green); background: var(--accent-green-light); }
+    .approval-item-info { flex: 1; min-width: 0; }
+    .approval-ref { font-size: 10px; font-family: 'Courier New', monospace; color: var(--accent-blue); font-weight: 700; }
+    .approval-subject { font-size: 12px; font-weight: 600; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .approval-meta { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+    /* Progress step indicator */
+    .step-progress { display: flex; gap: 4px; margin-bottom: 20px; }
+    .step-dot { height: 4px; flex: 1; border-radius: 1px; background: var(--border); transition: background 0.2s; }
+    .step-dot.active { background: var(--accent-blue); }
+    .step-dot.done { background: var(--accent-green); }
+
+    /* receipt row  */
+    .receipt-extracted { background: var(--accent-blue-light); border: 1px solid #bfdbfe; border-radius: 2px; padding: 14px; margin-bottom: 14px; }
+    .receipt-extracted-label { font-size: 10px; font-weight: 700; color: var(--accent-blue); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 8px; }
+
+    /* PIK-R search bar */
+    .search-bar { display: flex; align-items: center; gap: 8px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 2px; padding: 6px 12px; }
+    .search-bar input { background: none; border: none; outline: none; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-primary); flex: 1; }
+    .search-bar input::placeholder { color: var(--text-muted); }
+
+    /* Status dot */
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+    .status-dot.green { background: var(--accent-green); }
+    .status-dot.red { background: var(--accent-red); }
+
+    /* Tooltip helper text */
+    .helper-text { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+
+    /* Notification */
+    @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .notif {
+      position: fixed; top: 70px; right: 24px; z-index: 9999;
+      background: var(--text-primary); color: white;
+      padding: 10px 18px; border-radius: 3px; font-size: 12px; font-weight: 600;
+      box-shadow: var(--shadow-lg); animation: slideDown 0.25s ease;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .notif.success { background: var(--accent-green); }
+    .notif.error { background: var(--accent-red); }
+
+    /* Keuangan specific */
+    .fin-summary { background: var(--text-primary); border-radius: 3px; padding: 20px; margin-bottom: 20px; }
+    .fin-summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .fin-metric { }
+    .fin-metric-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.45); letter-spacing: 0.8px; text-transform: uppercase; }
+    .fin-metric-value { font-size: 20px; font-weight: 800; margin-top: 4px; letter-spacing: -0.5px; }
+    .fin-metric-value.income { color: #6ee7b7; }
+    .fin-metric-value.expense { color: #fca5a5; }
+    .fin-metric-value.balance { color: white; }
+    .fin-divider { width: 1px; background: rgba(255,255,255,0.12); }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+// ═══════════════════════════════════════════════════════════════
+// CONSTANTS & MOCK DATA
+// ═══════════════════════════════════════════════════════════════
+
+const KECAMATAN_LIST = ['Beji','Bojongsari','Cilodong','Cimanggis','Cinere','Cipayung','Limo','Pancoran Mas','Sawangan','Sukmajaya','Tapos'];
+
+const MONTH_NAMES = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const DAY_NAMES = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+
+const ROMAN_MONTHS = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+
+const BPH_MEMBERS = [
+  { id:1, pos:'Ketua Umum', name:'Muhammad Rafli A.' },
+  { id:2, pos:'Wakil Ketua', name:'Siti Rahayu P.' },
+  { id:3, pos:'Sekretaris 1', name:'Dina Kartika S.' },
+  { id:4, pos:'Sekretaris 2', name:'Fajar Nugroho' },
+  { id:5, pos:'Bendahara 1', name:'Lestari Wulandari' },
+  { id:6, pos:'Bendahara 2', name:'Rizky Pratama' },
+  { id:7, pos:'Kabid Internal', name:'Anisa Fitriani' },
+  { id:8, pos:'Kabid Eksternal', name:'Hendra Kusuma' },
+  { id:9, pos:'Kabid Branding', name:'Nadia Permata' },
+  { id:10, pos:'Duta GenRe Depok', name:'Kevin Alvaro M.' },
+];
+
+const INITIAL_PIKR = [
+  { id:1, nama:'PIK-R Anggrek Biru', kecamatan:'Beji', sk:'SK/001/BNK/2024', kontak:'0812-3456-7890', alamat:'Jl. Margonda Raya No.12', status:'Active' },
+  { id:2, nama:'PIK-R Tunas Muda', kecamatan:'Cimanggis', sk:'SK/002/BNK/2024', kontak:'0813-2345-6789', alamat:'Jl. Radar Auri No.5', status:'Active' },
+  { id:3, nama:'PIK-R Garuda Muda', kecamatan:'Sukmajaya', sk:'SK/003/BNK/2023', kontak:'0821-3456-7890', alamat:'Jl. Tole Iskandar No.8', status:'Expired' },
+  { id:4, nama:'PIK-R Bintang Fajar', kecamatan:'Pancoran Mas', sk:'SK/004/BNK/2024', kontak:'0856-7890-1234', alamat:'Jl. Dewi Sartika No.22', status:'Active' },
+  { id:5, nama:'PIK-R Melati Putih', kecamatan:'Tapos', sk:'SK/005/BNK/2025', kontak:'0877-6543-2100', alamat:'Jl. Raya Tapos No.30', status:'Active' },
+  { id:6, nama:'PIK-R Citra Remaja', kecamatan:'Sawangan', sk:'SK/006/BNK/2023', kontak:'0822-1234-5678', alamat:'Jl. Sawangan Raya No.7', status:'Expired' },
+  { id:7, nama:'PIK-R Insan Mandiri', kecamatan:'Limo', sk:'SK/007/BNK/2025', kontak:'0811-9876-5432', alamat:'Jl. Limo Raya No.15', status:'Active' },
+];
+
+const INITIAL_CALENDAR_EVENTS = {
+  '2026-06-03': [{ type:'blue', label:'Pengajuan ToR Webinar Kesehatan Reproduksi' }],
+  '2026-06-10': [{ type:'blue', label:'Pengajuan ToR Pelatihan Kader' }],
+  '2026-06-15': [{ type:'green', label:'Hari-H: Webinar Kesrep' }, { type:'amber', label:'Batas LPJ Kegiatan Apr' }],
+  '2026-06-20': [{ type:'green', label:'Hari-H: Pelatihan Kader PIK-R' }],
+  '2026-06-25': [{ type:'amber', label:'Batas Akhir LPJ Webinar' }],
+  '2026-06-05': [{ type:'green', label:'Hari-H: Audiensi Kecamatan Beji' }],
+  '2026-06-28': [{ type:'blue', label:'Pengajuan ToR HUT GenRe' }],
+  '2026-07-04': [{ type:'green', label:'Hari-H: Forum Diskusi Remaja' }],
+  '2026-07-12': [{ type:'amber', label:'Batas Akhir LPJ Pelatihan' }],
+  '2026-07-17': [{ type:'blue', label:'Pengajuan ToR Lomba Kreatif' }],
+};
+
+const CALENDAR_EVENT_DETAILS = {
+  '2026-06-15': {
+    events: [
+      { title: 'Webinar Kesehatan Reproduksi Remaja', venue: 'Zoom Meeting / Gedung BKKBN Depok', time: '09.00–12.00 WIB', status: 'ToR Approved', pic: 'Dina Kartika S.', items: ['Persiapan materi narasumber', 'Undangan peserta terkirim', 'Link Zoom telah dibuat', 'LPJ draft tersedia'] },
+    ]
+  },
+  '2026-06-20': {
+    events: [
+      { title: 'Pelatihan Kader PIK-R Tingkat Kota', venue: 'Aula BKKBN Kota Depok Lt.3', time: '08.00–16.00 WIB', status: 'ToR Approved', pic: 'Hendra Kusuma', items: ['Koordinasi venue selesai', 'Daftar peserta final', 'Konsumsi dipesan', 'ATK tersedia'] },
+    ]
+  },
+  '2026-06-03': {
+    events: [
+      { title: 'Pengajuan ToR Webinar Kesrep', venue: '-', time: 'Deadline 03 Juni 2026', status: 'LPJ Pending', pic: 'Fajar Nugroho', items: ['Draft ToR sedang direview', 'Anggaran belum final'] },
+    ]
+  },
+};
+
+const INITIAL_TRANSACTIONS = [
+  { id:1, date:'2026-06-01', desc:'Dana Kas Awal Bulan Juni 2026', kategori:'Pemasukan', nominal: 5000000, type:'income' },
+  { id:2, date:'2026-06-03', desc:'Cetak Banner Webinar Kesrep', kategori:'ATK', nominal: -350000, type:'expense' },
+  { id:3, date:'2026-06-05', desc:'Konsumsi Rapat Koordinasi', kategori:'Konsumsi', nominal: -280000, type:'expense' },
+  { id:4, date:'2026-06-10', desc:'Transport Perwakilan Musda BKKBN', kategori:'Transport', nominal: -450000, type:'expense' },
+  { id:5, date:'2026-06-12', desc:'Donasi Alumni Forum GenRe', kategori:'Pemasukan', nominal: 1500000, type:'income' },
+];
+
+const LETTER_TYPES = [
+  { code:'UND', label:'Surat Undangan', desc:'Mengundang pihak lain dalam kegiatan Forum GenRe' },
+  { code:'AUD', label:'Surat Audiensi', desc:'Permohonan audiensi ke instansi pemerintah/swasta' },
+  { code:'DIS', label:'Surat Dispensasi', desc:'Permohonan dispensasi kegiatan bagi anggota' },
+];
+
+const INITIAL_LETTERS = [
+  { id:1, ref:'040/UND/FGD/V/2026', subject:'Undangan Rapat Koordinasi BPH Forum GenRe Depok', to:'Seluruh BPH Forum GenRe Depok', date:'2026-05-20', status:'ACC', type:'UND', signedSek:true, signedKetua:true },
+  { id:2, ref:'041/AUD/FGD/V/2026', subject:'Permohonan Audiensi Dinas P3APM Kota Depok', to:'Kepala Dinas P3APM Kota Depok', date:'2026-05-28', status:'ACC', type:'AUD', signedSek:true, signedKetua:true },
+  { id:3, ref:'042/DIS/FGD/VI/2026', subject:'Permohonan Dispensasi Kegiatan Olimpiade Remaja', to:'Kepala SMAN 6 Depok', date:'2026-06-01', status:'Pending', type:'DIS', signedSek:false, signedKetua:false },
+  { id:4, ref:'043/UND/FGD/VI/2026', subject:'Undangan Webinar Kesehatan Reproduksi Remaja', to:'Seluruh PIK-R Kota Depok', date:'2026-06-08', status:'Pending', type:'UND', signedSek:false, signedKetua:false },
+];
+
+const formatRupiah = (n) => 'Rp ' + Math.abs(n).toLocaleString('id-ID');
+const formatDate = (dateStr) => {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('id-ID', { day:'2-digit', month:'long', year:'numeric' });
+};
+
+// ═══════════════════════════════════════════════════════════════
+// NOTIFICATION COMPONENT
+// ═══════════════════════════════════════════════════════════════
+function Notification({ msg, type, onDone }) {
+  useEffect(() => { const t = setTimeout(onDone, 3000); return () => clearTimeout(t); }, []);
+  return <div className={`notif ${type}`}><span>{type==='success'?'✓':type==='error'?'✕':'ℹ'}</span>{msg}</div>;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MODULE 1: CALENDAR DASHBOARD
+// ═══════════════════════════════════════════════════════════════
+function CalendarModule({ notify }) {
+  const today = new Date('2026-06-13T18:13:44+07:00');
+  const [viewYear, setViewYear] = useState(today.getFullYear());
+  const [viewMonth, setViewMonth] = useState(today.getMonth()); // 0-indexed
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [events] = useState(INITIAL_CALENDAR_EVENTS);
+
+  const daysInMonth = (y, m) => new Date(y, m+1, 0).getDate();
+  const firstDayOfMonth = (y, m) => new Date(y, m, 1).getDay();
+
+  const prevMonth = () => { if(viewMonth===0){setViewYear(y=>y-1);setViewMonth(11);}else setViewMonth(m=>m-1); };
+  const nextMonth = () => { if(viewMonth===11){setViewYear(y=>y+1);setViewMonth(0);}else setViewMonth(m=>m+1); };
+
+  const totalDays = daysInMonth(viewYear, viewMonth);
+  const firstDay = firstDayOfMonth(viewYear, viewMonth);
+  const prevMonthDays = daysInMonth(viewYear, viewMonth-1<0?11:viewMonth-1);
+
+  const cells = [];
+  for(let i=firstDay-1;i>=0;i--) cells.push({ day: prevMonthDays-i, curr: false });
+  for(let d=1;d<=totalDays;d++) cells.push({ day: d, curr: true });
+  const remain = 42 - cells.length;
+  for(let d=1;d<=remain;d++) cells.push({ day: d, curr: false });
+
+  const getDateKey = (day, curr) => {
+    if(!curr) return null;
+    return `${viewYear}-${String(viewMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+  };
+
+  const todayKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+
+  const selectedDetail = selectedDate ? CALENDAR_EVENT_DETAILS[selectedDate] : null;
+  const selectedEvents = selectedDate ? (events[selectedDate]||[]) : [];
+
+  return (
+    <div className="fade-in">
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'18px'}}>
+        <div>
+          <h1 style={{fontSize:'18px',fontWeight:'800',color:'var(--text-primary)'}}>Central Dashboard & Kalender</h1>
+          <p style={{fontSize:'12px',color:'var(--text-muted)',marginTop:'2px'}}>Jadwal & Timeline Kegiatan Forum GenRe Depok — 2026</p>
+        </div>
+        <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
+          <span className="badge badge-green">🟢 Sistem Aktif</span>
+          <span style={{fontSize:'11px',color:'var(--text-muted)'}}>13 Juni 2026</span>
+        </div>
+      </div>
+
+      {/* Summary metrics */}
+      <div className="metric-grid" style={{gridTemplateColumns:'repeat(4,1fr)'}}>
+        <div className="metric-card metric-accent-left">
+          <div className="metric-label">Total PIK-R Aktif</div>
+          <div className="metric-value">7</div>
+          <div className="metric-change" style={{color:'var(--accent-green)'}}>↑ 2 baru tahun ini</div>
+        </div>
+        <div className="metric-card metric-accent-green">
+          <div className="metric-label">Kegiatan Bulan Ini</div>
+          <div className="metric-value">4</div>
+          <div className="metric-change" style={{color:'var(--text-muted)'}}>2 selesai · 2 mendatang</div>
+        </div>
+        <div className="metric-card metric-accent-amber">
+          <div className="metric-label">Surat Pending</div>
+          <div className="metric-value">2</div>
+          <div className="metric-change" style={{color:'var(--accent-amber)'}}>Menunggu ACC Sekretaris</div>
+        </div>
+        <div className="metric-card" style={{borderLeft:'3px solid var(--accent-red)'}}>
+          <div className="metric-label">LPJ Jatuh Tempo</div>
+          <div className="metric-value">1</div>
+          <div className="metric-change" style={{color:'var(--accent-red)'}}>25 Juni 2026</div>
+        </div>
+      </div>
+
+      <div className="cal-grid">
+        {/* Calendar */}
+        <div className="card">
+          <div className="card-header">
+            <div>
+              <div className="card-title">📅 Kalender Administratif 2026</div>
+              <div className="card-subtitle">Klik tanggal untuk detail kegiatan</div>
+            </div>
+            <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
+              <button className="btn btn-ghost btn-sm" onClick={prevMonth}>‹</button>
+              <span style={{fontWeight:'700',fontSize:'13px',minWidth:'130px',textAlign:'center'}}>{MONTH_NAMES[viewMonth]} {viewYear}</span>
+              <button className="btn btn-ghost btn-sm" onClick={nextMonth}>›</button>
+            </div>
+          </div>
+          <div className="card-body" style={{padding:'0'}}>
+            {/* Legend */}
+            <div style={{padding:'10px 16px',borderBottom:'1px solid var(--border)',display:'flex',gap:'16px',flexWrap:'wrap'}}>
+              {[{c:'#3B82F6',l:'Pengajuan ToR'},{c:'#10B981',l:'Hari-H Kegiatan'},{c:'#F59E0B',l:'Batas Akhir LPJ'}].map(e=>(
+                <div key={e.l} style={{display:'flex',alignItems:'center',gap:'5px'}}>
+                  <span style={{width:'10px',height:'10px',borderRadius:'1px',background:e.c,display:'inline-block'}}></span>
+                  <span style={{fontSize:'10px',color:'var(--text-secondary)',fontWeight:'500'}}>{e.l}</span>
+                </div>
+              ))}
+            </div>
+            <div className="cal-weekdays">
+              {DAY_NAMES.map(d=><div key={d} className="cal-weekday">{d}</div>)}
+            </div>
+            <div className="cal-days">
+              {cells.map((cell, i) => {
+                const key = getDateKey(cell.day, cell.curr);
+                const dayEvents = key ? (events[key]||[]) : [];
+                const isToday = key === todayKey;
+                const isSelected = key === selectedDate;
+                return (
+                  <div
+                    key={i}
+                    className={`cal-day${!cell.curr?' other-month':''}${isToday?' today':''}${isSelected?' selected':''}`}
+                    onClick={() => cell.curr && setSelectedDate(key)}
+                  >
+                    <div className="cal-day-num">{isToday?<span style={{background:'var(--text-primary)',color:'white',borderRadius:'50%',width:'22px',height:'22px',display:'inline-flex',alignItems:'center',justifyContent:'center'}}>{cell.day}</span>:cell.day}</div>
+                    {dayEvents.slice(0,3).map((ev,ei)=>(
+                      <span key={ei} className={`cal-event-tag cal-event-${ev.type}`}>{ev.label}</span>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Detail Panel */}
+        <div>
+          <div className="card" style={{position:'sticky',top:'24px'}}>
+            <div className="card-header">
+              <div>
+                <div className="card-title">📋 Detail Tanggal</div>
+                <div className="card-subtitle">{selectedDate ? formatDate(selectedDate) : 'Pilih tanggal pada kalender'}</div>
+              </div>
+            </div>
+            {!selectedDate ? (
+              <div className="cal-panel-empty card-body">
+                <div style={{fontSize:'32px',marginBottom:'8px',opacity:0.3}}>📅</div>
+                <p>Klik tanggal di kalender<br/>untuk melihat detail kegiatan</p>
+              </div>
+            ) : selectedEvents.length === 0 ? (
+              <div className="cal-panel-empty card-body">
+                <div style={{fontSize:'32px',marginBottom:'8px',opacity:0.3}}>📭</div>
+                <p>Tidak ada kegiatan<br/>pada tanggal ini</p>
+                <button className="btn btn-primary btn-sm mt-3" onClick={()=>notify('Fitur tambah kegiatan segera hadir','success')}>+ Tambah Kegiatan</button>
+              </div>
+            ) : (
+              <div className="card-body">
+                {/* Events summary */}
+                <div style={{marginBottom:'14px',display:'flex',flexWrap:'wrap',gap:'5px'}}>
+                  {selectedEvents.map((ev,i)=>(
+                    <span key={i} className={`badge badge-${ev.type==='blue'?'blue':ev.type==='green'?'green':'amber'}`}>{ev.label}</span>
+                  ))}
+                </div>
+                {selectedDetail?.events.map((ev,i) => (
+                  <div key={i} style={{marginBottom:'12px'}}>
+                    <div style={{fontWeight:'700',fontSize:'12px',color:'var(--text-primary)',marginBottom:'8px'}}>{ev.title}</div>
+                    <div style={{fontSize:'11px',color:'var(--text-secondary)',marginBottom:'4px'}}>🕐 {ev.time}</div>
+                    <div style={{fontSize:'11px',color:'var(--text-secondary)',marginBottom:'4px'}}>📍 {ev.venue}</div>
+                    <div style={{fontSize:'11px',color:'var(--text-secondary)',marginBottom:'8px'}}>👤 PIC: {ev.pic}</div>
+                    <div className="divider" style={{margin:'10px 0'}}></div>
+                    <div style={{marginBottom:'6px',fontSize:'10px',fontWeight:'700',color:'var(--text-muted)',letterSpacing:'0.5px',textTransform:'uppercase'}}>Status Administrasi</div>
+                    <span className={`badge ${ev.status.includes('Approved')||ev.status.includes('Selesai')?'badge-green':ev.status.includes('Pending')?'badge-amber':'badge-blue'}`}>{ev.status}</span>
+                    <div className="divider" style={{margin:'10px 0'}}></div>
+                    <div style={{marginBottom:'6px',fontSize:'10px',fontWeight:'700',color:'var(--text-muted)',letterSpacing:'0.5px',textTransform:'uppercase'}}>Checklist Persiapan</div>
+                    {ev.items.map((item,ii)=>(
+                      <div key={ii} style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'5px',fontSize:'11px'}}>
+                        <span style={{color:'var(--accent-green)',fontWeight:'700'}}>✓</span>
+                        <span style={{color:'var(--text-secondary)'}}>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+                {!selectedDetail && (
+                  <div style={{fontSize:'11px',color:'var(--text-muted)',textAlign:'center',padding:'16px 0'}}>
+                    Detail lengkap belum tersedia.<br/>Klik "Tambah Detail" untuk melengkapi.
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MODULE 2: DATABASE PIK-R
+// ═══════════════════════════════════════════════════════════════
+function PIKRModule({ notify }) {
+  const [data, setData] = useState(INITIAL_PIKR);
+  const [search, setSearch] = useState('');
+  const [filterKec, setFilterKec] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({ nama:'', kecamatan:'', sk:'', kontak:'', alamat:'', status:'Active' });
+  const [skFile, setSkFile] = useState(null);
+  const [dragover, setDragover] = useState(false);
+  const fileRef = useRef();
+
+  const filtered = data.filter(r => {
+    const q = search.toLowerCase();
+    return (!search || r.nama.toLowerCase().includes(q) || r.kecamatan.toLowerCase().includes(q) || r.sk.toLowerCase().includes(q))
+      && (!filterKec || r.kecamatan === filterKec);
+  });
+
+  const handleAdd = () => {
+    if(!form.nama||!form.kecamatan||!form.sk) { notify('Lengkapi field wajib','error'); return; }
+    const newId = Math.max(...data.map(r=>r.id))+1;
+    setData(d=>[...d,{...form,id:newId}]);
+    setShowModal(false);
+    setForm({nama:'',kecamatan:'',sk:'',kontak:'',alamat:'',status:'Active'});
+    setSkFile(null);
+    notify('PIK-R berhasil ditambahkan','success');
+  };
+
+  const handleDelete = (id) => {
+    setData(d=>d.filter(r=>r.id!==id));
+    notify('Data PIK-R dihapus','success');
+  };
+
+  const onDrop = (e) => {
+    e.preventDefault(); setDragover(false);
+    const f = e.dataTransfer.files[0];
+    if(f) { setSkFile(f); notify(`File SK "${f.name}" diupload`,'success'); }
+  };
+
+  return (
+    <div className="fade-in">
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'18px'}}>
+        <div>
+          <h1 style={{fontSize:'18px',fontWeight:'800'}}>Database PIK-R Kecamatan</h1>
+          <p style={{fontSize:'12px',color:'var(--text-muted)',marginTop:'2px'}}>Manajemen Pusat Informasi & Konseling Remaja — 11 Kecamatan Kota Depok</p>
+        </div>
+        <button className="btn btn-primary" onClick={()=>setShowModal(true)} id="btn-tambah-pikr">+ Tambah PIK-R</button>
+      </div>
+
+      {/* Stats */}
+      <div className="metric-grid" style={{gridTemplateColumns:'repeat(4,1fr)',marginBottom:'16px'}}>
+        <div className="metric-card metric-accent-left">
+          <div className="metric-label">Total PIK-R</div>
+          <div className="metric-value">{data.length}</div>
+        </div>
+        <div className="metric-card metric-accent-green">
+          <div className="metric-label">SK Aktif</div>
+          <div className="metric-value">{data.filter(r=>r.status==='Active').length}</div>
+        </div>
+        <div className="metric-card" style={{borderLeft:'3px solid var(--accent-red)'}}>
+          <div className="metric-label">SK Kedaluwarsa</div>
+          <div className="metric-value">{data.filter(r=>r.status==='Expired').length}</div>
+        </div>
+        <div className="metric-card metric-accent-amber">
+          <div className="metric-label">Kecamatan Terdaftar</div>
+          <div className="metric-value">{[...new Set(data.map(r=>r.kecamatan))].length}</div>
+        </div>
+      </div>
+
+      <div className="card">
+        <div className="card-header">
+          <div className="card-title">📋 Daftar PIK-R Terdaftar</div>
+          <div style={{display:'flex',gap:'8px',alignItems:'center'}}>
+            <div className="search-bar" style={{width:'200px'}}>
+              <span style={{color:'var(--text-muted)'}}>🔍</span>
+              <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Cari nama, SK..." />
+            </div>
+            <select className="form-control" style={{width:'160px',padding:'6px 10px'}} value={filterKec} onChange={e=>setFilterKec(e.target.value)}>
+              <option value="">Semua Kecamatan</option>
+              {KECAMATAN_LIST.map(k=><option key={k}>{k}</option>)}
+            </select>
+          </div>
+        </div>
+        <div className="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama PIK-R</th>
+                <th>Kecamatan</th>
+                <th>Nomor SK</th>
+                <th>Kontak Ketua</th>
+                <th>Alamat</th>
+                <th>Status SK</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.length === 0 && (
+                <tr><td colSpan="8" style={{textAlign:'center',color:'var(--text-muted)',padding:'32px'}}>Tidak ada data ditemukan</td></tr>
+              )}
+              {filtered.map((r,i) => (
+                <tr key={r.id}>
+                  <td style={{color:'var(--text-muted)',fontWeight:'600'}}>{i+1}</td>
+                  <td style={{fontWeight:'600'}}>{r.nama}</td>
+                  <td><span className="badge badge-blue">{r.kecamatan}</span></td>
+                  <td style={{fontFamily:'monospace',fontSize:'11px'}}>{r.sk}</td>
+                  <td style={{fontSize:'11px'}}>{r.kontak}</td>
+                  <td style={{fontSize:'11px',maxWidth:'160px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{r.alamat}</td>
+                  <td>
+                    <span className={`badge ${r.status==='Active'?'badge-green':'badge-red'}`}>
+                      <span className={`status-dot ${r.status==='Active'?'green':'red'}`}></span>
+                      {r.status}
+                    </span>
+                  </td>
+                  <td>
+                    <div style={{display:'flex',gap:'5px'}}>
+                      <button className="btn btn-ghost btn-xs" onClick={()=>notify(`Detail ${r.nama} dimuat`,'success')}>Detail</button>
+                      <button className="btn btn-xs" style={{background:'var(--accent-red-light)',color:'var(--accent-red)',border:'none',borderRadius:'2px',padding:'2px 8px',fontSize:'10px',fontWeight:'600',cursor:'pointer'}} onClick={()=>handleDelete(r.id)}>Hapus</button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div style={{padding:'10px 16px',borderTop:'1px solid var(--border)',fontSize:'11px',color:'var(--text-muted)'}}>
+          Menampilkan {filtered.length} dari {data.length} data PIK-R
+        </div>
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&setShowModal(false)}>
+          <div className="modal fade-in">
+            <div className="modal-header">
+              <div className="modal-title">Tambah Data PIK-R Baru</div>
+              <button className="modal-close" onClick={()=>setShowModal(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              <div className="form-group">
+                <label className="form-label">Nama PIK-R *</label>
+                <input className="form-control" placeholder="contoh: PIK-R Bintang Remaja" value={form.nama} onChange={e=>setForm(f=>({...f,nama:e.target.value}))} />
+              </div>
+              <div className="grid-2">
+                <div className="form-group">
+                  <label className="form-label">Kecamatan *</label>
+                  <select className="form-control" value={form.kecamatan} onChange={e=>setForm(f=>({...f,kecamatan:e.target.value}))}>
+                    <option value="">Pilih Kecamatan</option>
+                    {KECAMATAN_LIST.map(k=><option key={k}>{k}</option>)}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Status SK</label>
+                  <select className="form-control" value={form.status} onChange={e=>setForm(f=>({...f,status:e.target.value}))}>
+                    <option>Active</option><option>Expired</option>
+                  </select>
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Nomor SK *</label>
+                <input className="form-control" placeholder="contoh: SK/008/BNK/2025" value={form.sk} onChange={e=>setForm(f=>({...f,sk:e.target.value}))} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Kontak Ketua</label>
+                <input className="form-control" placeholder="contoh: 0812-3456-7890" value={form.kontak} onChange={e=>setForm(f=>({...f,kontak:e.target.value}))} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Alamat Sekretariat</label>
+                <textarea className="form-control" placeholder="Alamat lengkap PIK-R" value={form.alamat} onChange={e=>setForm(f=>({...f,alamat:e.target.value}))} style={{minHeight:'60px'}} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Upload Dokumen SK</label>
+                <div
+                  className={`dropzone${dragover?' dragover':''}`}
+                  style={{padding:'20px'}}
+                  onClick={()=>fileRef.current.click()}
+                  onDrop={onDrop}
+                  onDragOver={e=>{e.preventDefault();setDragover(true);}}
+                  onDragLeave={()=>setDragover(false)}
+                >
+                  <input ref={fileRef} type="file" style={{display:'none'}} accept=".pdf,.doc,.docx,.jpg,.png" onChange={e=>{const f=e.target.files[0];if(f){setSkFile(f);notify(`File "${f.name}" siap diupload`,'success');}}} />
+                  <div className="dropzone-icon">📄</div>
+                  <div className="dropzone-text">{skFile ? skFile.name : 'Klik atau drag & drop file SK'}</div>
+                  <div className="dropzone-sub">PDF, DOC, JPG, PNG (max 5MB)</div>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-ghost" onClick={()=>setShowModal(false)}>Batal</button>
+              <button className="btn btn-primary" onClick={handleAdd} id="btn-simpan-pikr">Simpan PIK-R</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MODULE 3: SMART DISPOSISI
+// ═══════════════════════════════════════════════════════════════
+function DisposisiModule({ notify }) {
+  const [dragover, setDragover] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [extracted, setExtracted] = useState(null);
+  const [filename, setFilename] = useState('');
+  const [attendance, setAttendance] = useState({});
+  const fileRef = useRef();
+
+  const mockExtracted = [
+    { namaKegiatan:'Forum Diskusi Remaja Sehat 2026', tanggal:'Sabtu, 20 Juni 2026', waktu:'09.00 – 13.00 WIB', tempat:'Aula BKKBN Kota Depok, Jl. Margonda Raya No.54', peran:'Narasumber' },
+    { namaKegiatan:'Olimpiade Remaja Kreatif Tingkat Kota', tanggal:'Minggu, 5 Juli 2026', waktu:'08.00 – 17.00 WIB', tempat:'GOR Kota Depok, Jl. Raya Sawangan No.99', peran:'Juri' },
+    { namaKegiatan:'Musyawarah Daerah BKKBN Kota Depok', tanggal:'Rabu, 15 Juli 2026', waktu:'13.00 – 16.00 WIB', tempat:'Hotel Bumi Wiyata Depok', peran:'Undangan' },
+  ];
+  const [extractIdx] = useState(Math.floor(Math.random()*mockExtracted.length));
+
+  const simulateOCR = (fname) => {
+    setFilename(fname); setLoading(true); setExtracted(null);
+    setTimeout(()=>{ setLoading(false); setExtracted(mockExtracted[extractIdx]); notify('AI OCR berhasil mengekstrak data surat','success'); }, 2200);
+  };
+
+  const onDrop = (e) => { e.preventDefault(); setDragover(false); const f=e.dataTransfer.files[0]; if(f) simulateOCR(f.name); };
+  const onFileChange = (e) => { const f=e.target.files[0]; if(f) simulateOCR(f.name); };
+
+  const toggleAttendance = (id) => {
+    setAttendance(a => ({ ...a, [id]: a[id]==='hadir'?'berhalangan':a[id]==='berhalangan'?undefined:'hadir' }));
+  };
+  const hadirCount = BPH_MEMBERS.filter(m=>attendance[m.id]==='hadir').length;
+  const berhalanganCount = BPH_MEMBERS.filter(m=>attendance[m.id]==='berhalangan').length;
+
+  const peranColor = (p) => p==='Narasumber'?'badge-blue':p==='Juri'?'badge-amber':'badge-green';
+
+  return (
+    <div className="fade-in">
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'18px'}}>
+        <div>
+          <h1 style={{fontSize:'18px',fontWeight:'800'}}>Smart Disposisi & AI OCR Reader</h1>
+          <p style={{fontSize:'12px',color:'var(--text-muted)',marginTop:'2px'}}>Upload surat masuk — AI otomatis ekstrak data & kelola kehadiran BPH</p>
+        </div>
+        {extracted && <span className="badge badge-green">✓ Surat Terproses</span>}
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px'}}>
+        {/* Upload & OCR */}
+        <div>
+          <div className="card" style={{marginBottom:'14px'}}>
+            <div className="card-header"><div className="card-title">📨 Upload Surat Masuk</div></div>
+            <div className="card-body">
+              <div
+                className={`dropzone${dragover?' dragover':''}`}
+                onClick={()=>!loading&&fileRef.current.click()}
+                onDrop={onDrop}
+                onDragOver={e=>{e.preventDefault();setDragover(true);}}
+                onDragLeave={()=>setDragover(false)}
+              >
+                <input ref={fileRef} type="file" style={{display:'none'}} accept=".pdf,.jpg,.png,.doc,.docx" onChange={onFileChange} />
+                {loading ? (
+                  <div>
+                    <div className="dropzone-icon pulse">🤖</div>
+                    <div className="dropzone-text" style={{color:'var(--accent-blue)'}}>AI Extracting Data...</div>
+                    <div className="dropzone-sub">Memproses OCR surat "{filename}"</div>
+                    <div style={{marginTop:'12px',height:'4px',background:'var(--border)',borderRadius:'2px',overflow:'hidden'}}>
+                      <div className="pulse" style={{height:'100%',background:'var(--accent-blue)',width:'70%'}}></div>
+                    </div>
+                  </div>
+                ) : extracted ? (
+                  <div>
+                    <div className="dropzone-icon">✅</div>
+                    <div className="dropzone-text" style={{color:'var(--accent-green)'}}>Surat berhasil diproses</div>
+                    <div className="dropzone-sub">{filename}</div>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="dropzone-icon">📂</div>
+                    <div className="dropzone-text">Drop surat masuk di sini</div>
+                    <div className="dropzone-sub">PDF, JPG, DOC — AI akan mengekstrak data otomatis</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {extracted && (
+            <div className="card fade-in">
+              <div className="card-header">
+                <div className="card-title">🧠 Hasil Ekstraksi AI</div>
+                <span className="badge badge-blue">OCR Selesai</span>
+              </div>
+              <div className="card-body">
+                {[
+                  {label:'Nama Kegiatan', val:extracted.namaKegiatan, icon:'📌'},
+                  {label:'Tanggal', val:extracted.tanggal, icon:'📅'},
+                  {label:'Waktu', val:extracted.waktu, icon:'🕐'},
+                  {label:'Tempat', val:extracted.tempat, icon:'📍'},
+                  {label:'Peran Forum GenRe', val:extracted.peran, icon:'🎭'},
+                ].map(field=>(
+                  <div key={field.label} style={{display:'flex',gap:'10px',marginBottom:'10px',paddingBottom:'10px',borderBottom:'1px solid var(--border)'}}>
+                    <span style={{fontSize:'14px'}}>{field.icon}</span>
+                    <div>
+                      <div style={{fontSize:'10px',fontWeight:'700',color:'var(--text-muted)',textTransform:'uppercase',letterSpacing:'0.5px'}}>{field.label}</div>
+                      <div style={{fontSize:'12px',fontWeight:'600',marginTop:'2px',display:'flex',alignItems:'center',gap:'6px'}}>
+                        {field.label==='Peran Forum GenRe' ? <span className={`badge ${peranColor(field.val)}`}>{field.val}</span> : field.val}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <button className="btn btn-primary w-full" onClick={()=>notify('Disposisi disimpan ke arsip','success')}>💾 Simpan Disposisi</button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* BPH RSVP Matrix */}
+        <div className="card">
+          <div className="card-header">
+            <div>
+              <div className="card-title">👥 BPH RSVP Attendance Matrix</div>
+              <div className="card-subtitle">Toggle kehadiran setiap posisi BPH</div>
+            </div>
+          </div>
+          <div style={{padding:'12px 16px',borderBottom:'1px solid var(--border)',display:'flex',gap:'12px',alignItems:'center'}}>
+            <div style={{flex:1,background:'var(--accent-green-light)',padding:'8px 12px',borderRadius:'2px',borderLeft:'3px solid var(--accent-green)'}}>
+              <div style={{fontSize:'10px',fontWeight:'700',color:'var(--accent-green)',letterSpacing:'0.5px',textTransform:'uppercase'}}>Total Hadir</div>
+              <div style={{fontSize:'20px',fontWeight:'800',color:'var(--accent-green)'}}>{hadirCount} <span style={{fontSize:'12px',fontWeight:'500'}}>Orang</span></div>
+            </div>
+            <div style={{flex:1,background:'var(--accent-red-light)',padding:'8px 12px',borderRadius:'2px',borderLeft:'3px solid var(--accent-red)'}}>
+              <div style={{fontSize:'10px',fontWeight:'700',color:'var(--accent-red)',letterSpacing:'0.5px',textTransform:'uppercase'}}>Berhalangan</div>
+              <div style={{fontSize:'20px',fontWeight:'800',color:'var(--accent-red)'}}>{berhalanganCount} <span style={{fontSize:'12px',fontWeight:'500'}}>Orang</span></div>
+            </div>
+            <div style={{flex:1,background:'var(--bg-tertiary)',padding:'8px 12px',borderRadius:'2px',borderLeft:'3px solid var(--border-strong)'}}>
+              <div style={{fontSize:'10px',fontWeight:'700',color:'var(--text-muted)',letterSpacing:'0.5px',textTransform:'uppercase'}}>Belum Konfirmasi</div>
+              <div style={{fontSize:'20px',fontWeight:'800',color:'var(--text-secondary)'}}>{BPH_MEMBERS.length-hadirCount-berhalanganCount} <span style={{fontSize:'12px',fontWeight:'500'}}>Orang</span></div>
+            </div>
+          </div>
+          <div className="card-body" style={{padding:'12px 14px'}}>
+            <div className="disp-grid">
+              {BPH_MEMBERS.map(m => {
+                const stat = attendance[m.id];
+                return (
+                  <div key={m.id} className="disp-member" style={{flexDirection:'column',alignItems:'flex-start',gap:'6px'}}>
+                    <div>
+                      <div className="disp-member-name">{m.name}</div>
+                      <div className="disp-member-role">{m.pos}</div>
+                    </div>
+                    <div style={{display:'flex',gap:'5px',width:'100%'}}>
+                      <button
+                        className="toggle-btn"
+                        style={{flex:1,background:stat==='hadir'?'var(--accent-green)':'var(--accent-green-light)',color:stat==='hadir'?'white':'var(--accent-green)',fontWeight:'700',fontSize:'10px',padding:'4px 0',border:'none',cursor:'pointer',borderRadius:'2px',transition:'all 0.15s'}}
+                        onClick={()=>setAttendance(a=>({...a,[m.id]:'hadir'}))}
+                      >✓ Hadir</button>
+                      <button
+                        className="toggle-btn"
+                        style={{flex:1,background:stat==='berhalangan'?'var(--accent-red)':'var(--accent-red-light)',color:stat==='berhalangan'?'white':'var(--accent-red)',fontWeight:'700',fontSize:'10px',padding:'4px 0',border:'none',cursor:'pointer',borderRadius:'2px',transition:'all 0.15s'}}
+                        onClick={()=>setAttendance(a=>({...a,[m.id]:'berhalangan'}))}
+                      >✗ Berhalangan</button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {(hadirCount > 0 || berhalanganCount > 0) && (
+              <div style={{marginTop:'12px',padding:'10px 12px',background:'var(--bg-secondary)',borderRadius:'2px',border:'1px solid var(--border)',fontSize:'11px',color:'var(--text-secondary)'}}>
+                💡 <strong>Total Delegasi Hadir: {hadirCount} Orang</strong> — siap mewakili Forum GenRe Depok dalam kegiatan.
+              </div>
+            )}
+          </div>
+          {extracted && (
+            <div style={{padding:'12px 16px',borderTop:'1px solid var(--border)'}}>
+              <button className="btn btn-primary w-full" onClick={()=>notify('Rekapitulasi RSVP berhasil dikirim ke Sekretaris','success')}>📤 Kirim Rekapitulasi ke Sekretaris</button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MODULE 4: TOR & LPJ GENERATOR
+// ═══════════════════════════════════════════════════════════════
+function TORModule({ notify }) {
+  const [step, setStep] = useState(1);
+  const [form, setForm] = useState({
+    latar:'', rumusan:'', tujuan:'', target:'', sasaran:'',
+    tanggal:'', waktu:'', tempat:'', pemateri:'',
+    rundown: [
+      {waktu:'07.30–08.00',sesi:'Registrasi Peserta',penanggung:'Panitia Sekretariat'},
+      {waktu:'08.00–08.30',sesi:'Pembukaan & Sambutan Ketua Umum',penanggung:'Ketua Umum'},
+      {waktu:'08.30–10.30',sesi:'Sesi Materi Utama',penanggung:'Narasumber'},
+      {waktu:'10.30–10.45',sesi:'Sesi Tanya Jawab',penanggung:'Moderator'},
+      {waktu:'10.45–11.00',sesi:'Penutupan & Dokumentasi',penanggung:'Panitia'},
+    ],
+    namaKegiatan:''
+  });
+  const [newRundown, setNewRundown] = useState({waktu:'',sesi:'',penanggung:''});
+
+  const steps = ['Latar Belakang','Tujuan & Target','Waktu & Tempat','Rundown Detail'];
+  const allFilled = form.latar && form.tujuan && form.tanggal && form.tempat && form.namaKegiatan;
+
+  const up = (k,v) => setForm(f=>({...f,[k]:v}));
+
+  const addRundown = () => {
+    if(!newRundown.waktu||!newRundown.sesi) return;
+    setForm(f=>({...f,rundown:[...f.rundown,{...newRundown}]}));
+    setNewRundown({waktu:'',sesi:'',penanggung:''});
+  };
+
+  const removeRundown = (i) => setForm(f=>({...f,rundown:f.rundown.filter((_,idx)=>idx!==i)}));
+
+  const now = new Date('2026-06-13T18:13:44+07:00');
+
+  return (
+    <div className="fade-in">
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'18px'}}>
+        <div>
+          <h1 style={{fontSize:'18px',fontWeight:'800'}}>Automated ToR & LPJ Generator</h1>
+          <p style={{fontSize:'12px',color:'var(--text-muted)',marginTop:'2px'}}>Buat dokumen ToR kegiatan resmi secara otomatis dengan live preview</p>
+        </div>
+        <button
+          className={`btn ${allFilled?'btn-primary':'btn-ghost'}`}
+          disabled={!allFilled}
+          onClick={()=>notify('Export PDF berhasil! Dokumen ToR siap didownload','success')}
+          id="btn-export-pdf"
+        >
+          📥 Export to PDF
+        </button>
+      </div>
+
+      {/* Step Progress */}
+      <div className="step-progress">
+        {steps.map((s,i)=>(
+          <div key={i} className={`step-dot${step>i+1?' done':step===i+1?' active':''}`}></div>
+        ))}
+      </div>
+
+      <div className="wizard-layout">
+        {/* Left: Form */}
+        <div>
+          <div className="card">
+            <div className="card-header">
+              <div>
+                <div className="card-title">Langkah {step}: {steps[step-1]}</div>
+                <div className="card-subtitle">Isi form berikut untuk melengkapi dokumen ToR</div>
+              </div>
+              <div style={{display:'flex',gap:'5px'}}>
+                {steps.map((_,i)=>(
+                  <div key={i} style={{width:'24px',height:'24px',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'10px',fontWeight:'700',cursor:'pointer',background:step>i+1?'var(--accent-green)':step===i+1?'var(--accent-blue)':'var(--bg-tertiary)',color:step>=i+1?'white':'var(--text-muted)',border:`1px solid ${step>i+1?'var(--accent-green)':step===i+1?'var(--accent-blue)':'var(--border)'}`}} onClick={()=>setStep(i+1)}>{i+1}</div>
+                ))}
+              </div>
+            </div>
+            <div className="card-body">
+              {step===1 && (
+                <div>
+                  <div className="form-group">
+                    <label className="form-label">Nama Kegiatan *</label>
+                    <input className="form-control" value={form.namaKegiatan} onChange={e=>up('namaKegiatan',e.target.value)} placeholder="contoh: Webinar Kesehatan Reproduksi Remaja 2026" />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Latar Belakang *</label>
+                    <textarea className="form-control" value={form.latar} onChange={e=>up('latar',e.target.value)} placeholder="Uraikan latar belakang diadakannya kegiatan ini..." style={{minHeight:'100px'}} />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Rumusan Masalah</label>
+                    <textarea className="form-control" value={form.rumusan} onChange={e=>up('rumusan',e.target.value)} placeholder="Rumusan masalah yang menjadi dasar kegiatan..." style={{minHeight:'80px'}} />
+                  </div>
+                </div>
+              )}
+              {step===2 && (
+                <div>
+                  <div className="form-group">
+                    <label className="form-label">Tujuan Kegiatan *</label>
+                    <textarea className="form-control" value={form.tujuan} onChange={e=>up('tujuan',e.target.value)} placeholder="1. Meningkatkan pengetahuan remaja...\n2. Membangun kesadaran..." style={{minHeight:'100px'}} />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Target Peserta / Anggota</label>
+                    <input className="form-control" value={form.target} onChange={e=>up('target',e.target.value)} placeholder="contoh: 100 kader PIK-R se-Kota Depok" />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Sasaran Kegiatan</label>
+                    <input className="form-control" value={form.sasaran} onChange={e=>up('sasaran',e.target.value)} placeholder="contoh: Remaja usia 14–24 tahun se-Kota Depok" />
+                  </div>
+                </div>
+              )}
+              {step===3 && (
+                <div>
+                  <div className="grid-2">
+                    <div className="form-group">
+                      <label className="form-label">Tanggal Kegiatan *</label>
+                      <input className="form-control" type="date" value={form.tanggal} onChange={e=>up('tanggal',e.target.value)} />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Waktu Pelaksanaan</label>
+                      <input className="form-control" value={form.waktu} onChange={e=>up('waktu',e.target.value)} placeholder="contoh: 08.00–16.00 WIB" />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Tempat *</label>
+                    <input className="form-control" value={form.tempat} onChange={e=>up('tempat',e.target.value)} placeholder="contoh: Aula BKKBN Kota Depok, Jl. Margonda Raya No.54" />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Narasumber / Pemateri</label>
+                    <textarea className="form-control" value={form.pemateri} onChange={e=>up('pemateri',e.target.value)} placeholder="1. Dr. Ahmad (BKKBN Pusat)\n2. ..." style={{minHeight:'70px'}} />
+                  </div>
+                </div>
+              )}
+              {step===4 && (
+                <div>
+                  <div style={{marginBottom:'12px',fontSize:'11px',color:'var(--text-secondary)'}}>Susunan rundown kegiatan secara detail. Tambah, edit, atau hapus sesi sesuai kebutuhan.</div>
+                  <div className="table-wrapper" style={{border:'1px solid var(--border)',borderRadius:'2px',marginBottom:'12px'}}>
+                    <table>
+                      <thead>
+                        <tr><th>Waktu</th><th>Sesi / Acara</th><th>Penanggung Jawab</th><th>–</th></tr>
+                      </thead>
+                      <tbody>
+                        {form.rundown.map((r,i)=>(
+                          <tr key={i}>
+                            <td style={{fontFamily:'monospace',fontSize:'11px',whiteSpace:'nowrap'}}>{r.waktu}</td>
+                            <td style={{fontSize:'11px'}}>{r.sesi}</td>
+                            <td style={{fontSize:'11px',color:'var(--text-secondary)'}}>{r.penanggung}</td>
+                            <td><button style={{background:'none',border:'none',cursor:'pointer',color:'var(--accent-red)',fontSize:'14px'}} onClick={()=>removeRundown(i)}>×</button></td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div style={{background:'var(--bg-secondary)',border:'1px solid var(--border)',borderRadius:'2px',padding:'10px'}}>
+                    <div style={{fontSize:'10px',fontWeight:'700',color:'var(--text-muted)',marginBottom:'8px',textTransform:'uppercase',letterSpacing:'0.5px'}}>Tambah Sesi</div>
+                    <div className="grid-3">
+                      <input className="form-control" placeholder="Waktu (08.00–09.00)" value={newRundown.waktu} onChange={e=>setNewRundown(r=>({...r,waktu:e.target.value}))} />
+                      <input className="form-control" placeholder="Nama Sesi" value={newRundown.sesi} onChange={e=>setNewRundown(r=>({...r,sesi:e.target.value}))} />
+                      <input className="form-control" placeholder="Penanggung Jawab" value={newRundown.penanggung} onChange={e=>setNewRundown(r=>({...r,penanggung:e.target.value}))} />
+                    </div>
+                    <button className="btn btn-success btn-sm mt-2" onClick={addRundown}>+ Tambah Sesi</button>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="modal-footer" style={{justifyContent:'space-between'}}>
+              <button className="btn btn-ghost" disabled={step===1} onClick={()=>setStep(s=>s-1)}>‹ Sebelumnya</button>
+              {step < 4 ? (
+                <button className="btn btn-primary" onClick={()=>setStep(s=>s+1)}>Selanjutnya ›</button>
+              ) : (
+                <button className={`btn ${allFilled?'btn-success':'btn-ghost'}`} disabled={!allFilled} onClick={()=>notify('ToR berhasil disimpan ke arsip','success')}>✓ Selesai & Simpan</button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Preview */}
+        <div>
+          <div className="card">
+            <div className="card-header">
+              <div className="card-title">📄 Live Preview Dokumen ToR</div>
+              <span className="badge badge-amber">Real-time Preview</span>
+            </div>
+            <div style={{padding:'14px',maxHeight:'600px',overflowY:'auto'}}>
+              <div className="doc-preview">
+                <div className="doc-preview-header">
+                  <div className="doc-preview-org">FORUM GENRE KOTA DEPOK</div>
+                  <div className="doc-preview-sub">Sekretariat: Kantor BKKBN Kota Depok, Jl. Margonda Raya No.54</div>
+                  <div className="doc-preview-sub">📞 (021) 77820XX | 📧 forumgenredepok@gmail.com</div>
+                </div>
+                <div className="doc-preview-title">TERMS OF REFERENCE (ToR)</div>
+                <div style={{textAlign:'center',fontSize:'12px',fontWeight:'700',marginBottom:'16px',textDecoration:'underline'}}>
+                  {form.namaKegiatan||'[NAMA KEGIATAN]'}
+                </div>
+                <div className="doc-preview-section">
+                  <div className="doc-preview-section-title">I. LATAR BELAKANG</div>
+                  <div style={{fontSize:'11px',lineHeight:'1.8',whiteSpace:'pre-wrap'}}>{form.latar || <span style={{color:'#999',fontStyle:'italic'}}>[Isi latar belakang di formulir]</span>}</div>
+                </div>
+                {form.rumusan && (
+                  <div className="doc-preview-section">
+                    <div className="doc-preview-section-title">RUMUSAN MASALAH</div>
+                    <div style={{fontSize:'11px',lineHeight:'1.8',whiteSpace:'pre-wrap'}}>{form.rumusan}</div>
+                  </div>
+                )}
+                <div className="doc-preview-section">
+                  <div className="doc-preview-section-title">II. TUJUAN KEGIATAN</div>
+                  <div style={{fontSize:'11px',lineHeight:'1.8',whiteSpace:'pre-wrap'}}>{form.tujuan || <span style={{color:'#999',fontStyle:'italic'}}>[Isi tujuan di formulir]</span>}</div>
+                </div>
+                {(form.target||form.sasaran) && (
+                  <div className="doc-preview-section">
+                    <div className="doc-preview-section-title">III. TARGET & SASARAN</div>
+                    {form.target && <div style={{fontSize:'11px'}}>• Peserta: {form.target}</div>}
+                    {form.sasaran && <div style={{fontSize:'11px'}}>• Sasaran: {form.sasaran}</div>}
+                  </div>
+                )}
+                <div className="doc-preview-section">
+                  <div className="doc-preview-section-title">IV. WAKTU & TEMPAT</div>
+                  <div style={{fontSize:'11px'}}>• Tanggal: {form.tanggal ? formatDate(form.tanggal) : <span style={{color:'#999',fontStyle:'italic'}}>[Pilih tanggal]</span>}</div>
+                  {form.waktu && <div style={{fontSize:'11px'}}>• Waktu: {form.waktu}</div>}
+                  <div style={{fontSize:'11px'}}>• Tempat: {form.tempat || <span style={{color:'#999',fontStyle:'italic'}}>[Isi tempat]</span>}</div>
+                  {form.pemateri && <div style={{fontSize:'11px',marginTop:'6px',whiteSpace:'pre-wrap'}}>• Narasumber:<br/>{form.pemateri}</div>}
+                </div>
+                {form.rundown.length > 0 && (
+                  <div className="doc-preview-section">
+                    <div className="doc-preview-section-title">V. SUSUNAN ACARA</div>
+                    <table style={{width:'100%',borderCollapse:'collapse',fontSize:'10px',marginTop:'6px'}}>
+                      <thead>
+                        <tr style={{borderBottom:'1px solid #1a1a1a'}}>
+                          <th style={{textAlign:'left',padding:'3px 6px'}}>Waktu</th>
+                          <th style={{textAlign:'left',padding:'3px 6px'}}>Sesi</th>
+                          <th style={{textAlign:'left',padding:'3px 6px'}}>Penanggung Jawab</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {form.rundown.map((r,i)=>(
+                          <tr key={i} style={{borderBottom:'1px dashed #ccc'}}>
+                            <td style={{padding:'3px 6px',whiteSpace:'nowrap'}}>{r.waktu}</td>
+                            <td style={{padding:'3px 6px'}}>{r.sesi}</td>
+                            <td style={{padding:'3px 6px'}}>{r.penanggung}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+                <div style={{marginTop:'24px',display:'flex',justifyContent:'space-between',fontSize:'11px'}}>
+                  <div style={{textAlign:'center'}}>
+                    <div>Depok, {now.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</div>
+                    <div style={{marginTop:'4px',fontWeight:'700'}}>Ketua Umum</div>
+                    <div style={{height:'50px',borderBottom:'1px solid #1a1a1a',marginTop:'8px',width:'120px'}}></div>
+                    <div style={{marginTop:'4px',fontWeight:'700'}}>Muhammad Rafli A.</div>
+                  </div>
+                  <div style={{textAlign:'center'}}>
+                    <div>Mengetahui,</div>
+                    <div style={{marginTop:'4px',fontWeight:'700'}}>Sekretaris Umum</div>
+                    <div style={{height:'50px',borderBottom:'1px solid #1a1a1a',marginTop:'8px',width:'120px'}}></div>
+                    <div style={{marginTop:'4px',fontWeight:'700'}}>Dina Kartika S.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MODULE 5: PERSURATAN DIGITAL
+// ═══════════════════════════════════════════════════════════════
+function PersurataModule({ notify }) {
+  const [tab, setTab] = useState('request');
+  const [letters, setLetters] = useState(INITIAL_LETTERS);
+  const [letterCounters, setLetterCounters] = useState({ UND:44, AUD:2, DIS:1 });
+  const [form, setForm] = useState({ penerima:'', tempat:'', tanggal:'', perihal:'', tujuan:'', type:'' });
+  const [generatedRef, setGeneratedRef] = useState('');
+  const [selectedLetter, setSelectedLetter] = useState(null);
+  const [showPreview, setShowPreview] = useState(false);
+
+  const now = new Date('2026-06-13T18:13:44+07:00');
+
+  const onTypeChange = (type) => {
+    setForm(f=>({...f,type}));
+    if(!type) { setGeneratedRef(''); return; }
+    const next = (letterCounters[type]||0) + 1;
+    const mon = ROMAN_MONTHS[now.getMonth()];
+    const ref = `${String(next).padStart(3,'0')}/${type}/FGD/${mon}/${now.getFullYear()}`;
+    setGeneratedRef(ref);
+  };
+
+  const handleSubmit = () => {
+    if(!form.penerima||!form.perihal||!form.type||!form.tanggal) { notify('Lengkapi semua field wajib','error'); return; }
+    const newLetter = {
+      id: Date.now(), ref: generatedRef, subject: form.perihal,
+      to: form.penerima, date: form.tanggal, status:'Pending',
+      type: form.type, signedSek:false, signedKetua:false,
+      tujuan: form.tujuan
+    };
+    setLetters(l=>[...l,newLetter]);
+    setLetterCounters(c=>({...c,[form.type]:(c[form.type]||0)+1}));
+    setForm({penerima:'',tempat:'',tanggal:'',perihal:'',tujuan:'',type:''});
+    setGeneratedRef('');
+    notify('Surat berhasil diajukan, menunggu ACC Sekretaris','success');
+    setTab('approval');
+  };
+
+  const handleApprove = (id) => {
+    setLetters(l=>l.map(lt=>lt.id===id?{...lt,status:'ACC',signedSek:true,signedKetua:true}:lt));
+    notify('Surat berhasil di-ACC dengan tanda tangan digital','success');
+    const target = letters.find(l=>l.id===id);
+    if(target) setSelectedLetter({...target,status:'ACC',signedSek:true,signedKetua:true});
+    setShowPreview(true);
+  };
+
+  const pendingLetters = letters.filter(l=>l.status==='Pending');
+  const accLetters = letters.filter(l=>l.status==='ACC');
+
+  const typeObj = (code) => LETTER_TYPES.find(t=>t.code===code)||{label:code,desc:''};
+
+  return (
+    <div className="fade-in">
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'18px'}}>
+        <div>
+          <h1 style={{fontSize:'18px',fontWeight:'800'}}>Persuratan Digital & Secretary Approval</h1>
+          <p style={{fontSize:'12px',color:'var(--text-muted)',marginTop:'2px'}}>Pengajuan surat resmi & workflow approval digital Forum GenRe Depok</p>
+        </div>
+        <div style={{display:'flex',gap:'8px'}}>
+          <span className="badge badge-amber">{pendingLetters.length} Pending</span>
+          <span className="badge badge-green">{accLetters.length} ACC</span>
+        </div>
+      </div>
+
+      <div className="tab-bar">
+        <button className={`tab-btn${tab==='request'?' active':''}`} onClick={()=>setTab('request')}>📝 PIC Request Form</button>
+        <button className={`tab-btn${tab==='approval'?' active':''}`} onClick={()=>setTab('approval')}>✅ Sekretaris Approval Panel {pendingLetters.length>0&&<span style={{marginLeft:'5px',background:'var(--accent-amber)',color:'white',padding:'1px 5px',borderRadius:'9px',fontSize:'9px',fontWeight:'700'}}>{pendingLetters.length}</span>}</button>
+        <button className={`tab-btn${tab==='archive'?' active':''}`} onClick={()=>setTab('archive')}>🗂️ Arsip Surat</button>
+      </div>
+
+      {tab==='request' && (
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px'}} className="fade-in">
+          <div className="card">
+            <div className="card-header"><div className="card-title">📋 Form Pengajuan Surat</div></div>
+            <div className="card-body">
+              <div className="form-group">
+                <label className="form-label">Jenis Surat *</label>
+                <select className="form-control" value={form.type} onChange={e=>onTypeChange(e.target.value)}>
+                  <option value="">— Pilih Jenis Surat —</option>
+                  {LETTER_TYPES.map(t=><option key={t.code} value={t.code}>{t.label}</option>)}
+                </select>
+              </div>
+              {generatedRef && (
+                <div style={{background:'var(--accent-blue-light)',border:'1px solid #bfdbfe',borderRadius:'2px',padding:'10px 12px',marginBottom:'14px',display:'flex',alignItems:'center',gap:'10px'}}>
+                  <span style={{fontSize:'14px'}}>🔖</span>
+                  <div>
+                    <div style={{fontSize:'10px',fontWeight:'700',color:'var(--accent-blue)',letterSpacing:'0.5px',textTransform:'uppercase'}}>Nomor Surat (Auto-generated)</div>
+                    <div style={{fontSize:'14px',fontWeight:'800',fontFamily:'monospace',color:'var(--accent-blue)',marginTop:'2px'}}>{generatedRef}</div>
+                  </div>
+                </div>
+              )}
+              <div className="form-group">
+                <label className="form-label">Nama / Jabatan Penerima *</label>
+                <input className="form-control" value={form.penerima} onChange={e=>setForm(f=>({...f,penerima:e.target.value}))} placeholder="contoh: Kepala BKKBN Kota Depok" />
+              </div>
+              <div className="grid-2">
+                <div className="form-group">
+                  <label className="form-label">Tempat Surat</label>
+                  <input className="form-control" value={form.tempat} onChange={e=>setForm(f=>({...f,tempat:e.target.value}))} placeholder="Kota Depok" />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Tanggal Surat *</label>
+                  <input className="form-control" type="date" value={form.tanggal} onChange={e=>setForm(f=>({...f,tanggal:e.target.value}))} />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Perihal *</label>
+                <input className="form-control" value={form.perihal} onChange={e=>setForm(f=>({...f,perihal:e.target.value}))} placeholder="Perihal / subjek surat" />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Isi / Tujuan Surat</label>
+                <textarea className="form-control" value={form.tujuan} onChange={e=>setForm(f=>({...f,tujuan:e.target.value}))} placeholder="Uraikan isi dan tujuan surat secara singkat..." style={{minHeight:'80px'}} />
+              </div>
+              <button className="btn btn-primary w-full" onClick={handleSubmit} id="btn-ajukan-surat">📤 Ajukan Surat</button>
+            </div>
+          </div>
+          {/* Letter Preview */}
+          <div className="card">
+            <div className="card-header"><div className="card-title">📄 Preview Surat</div></div>
+            <div style={{padding:'12px',maxHeight:'580px',overflowY:'auto'}}>
+              <div className="letter-preview" style={{padding:'28px',fontSize:'11px',lineHeight:'1.7'}}>
+                <div className="letter-header">
+                  <div className="letter-logo">FG</div>
+                  <div>
+                    <div className="letter-org-name">FORUM GENRE KOTA DEPOK</div>
+                    <div className="letter-org-sub">Jl. Margonda Raya No.54 Depok | Telp. (021) 77820XX<br/>Email: forumgenredepok@gmail.com</div>
+                  </div>
+                </div>
+                <table className="letter-ref-table" style={{marginBottom:'16px'}}>
+                  <tbody>
+                    <tr>
+                      <td style={{width:'90px',verticalAlign:'top',fontWeight:'600'}}>Nomor</td>
+                      <td style={{width:'10px'}}>:</td>
+                      <td style={{fontFamily:'monospace',fontWeight:'700'}}>{generatedRef||'___/___/FGD/___/2026'}</td>
+                    </tr>
+                    <tr>
+                      <td style={{fontWeight:'600'}}>Lampiran</td>
+                      <td>:</td>
+                      <td>—</td>
+                    </tr>
+                    <tr>
+                      <td style={{fontWeight:'600'}}>Perihal</td>
+                      <td>:</td>
+                      <td style={{fontWeight:'600'}}>{form.perihal||'...'}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div className="letter-body" style={{marginBottom:'16px'}}>
+                  <div>Kepada Yth.</div>
+                  <div style={{fontWeight:'700'}}>{form.penerima||'[Nama Penerima]'}</div>
+                  <div>di {form.tempat||'—'}</div>
+                  <div style={{marginTop:'12px'}}>Dengan hormat,</div>
+                  <div style={{marginTop:'8px',textIndent:'2em'}}>
+                    Dalam rangka {form.perihal?.toLowerCase()||'[perihal surat]'}, kami dari Forum GenRe Kota Depok dengan hormat {typeObj(form.type).code==='UND'?'mengundang':'mengajukan permohonan kepada'} Bapak/Ibu untuk {form.tujuan||'[isi tujuan surat]'}.
+                  </div>
+                  <div style={{marginTop:'8px',textIndent:'2em'}}>
+                    Demikian surat ini kami sampaikan. Atas perhatian dan kerja sama Bapak/Ibu, kami mengucapkan terima kasih.
+                  </div>
+                </div>
+                <div style={{display:'flex',justifyContent:'flex-end',marginTop:'16px'}}>
+                  <div style={{textAlign:'center'}}>
+                    <div>Depok, {form.tanggal?formatDate(form.tanggal):now.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</div>
+                    <div style={{marginTop:'4px',fontWeight:'700'}}>Ketua Umum</div>
+                    <div style={{height:'50px',borderBottom:'1px solid #1a1a1a',marginTop:'8px',width:'130px',display:'flex',alignItems:'center',justifyContent:'center',fontStyle:'italic',color:'#aaa',fontSize:'10px'}}>[ttd digital]</div>
+                    <div style={{marginTop:'4px',fontWeight:'700'}}>Muhammad Rafli A.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {tab==='approval' && (
+        <div className="fade-in">
+          {pendingLetters.length === 0 ? (
+            <div style={{textAlign:'center',padding:'60px',color:'var(--text-muted)'}}>
+              <div style={{fontSize:'40px',marginBottom:'10px',opacity:0.3}}>📭</div>
+              <p style={{fontWeight:'600'}}>Tidak ada surat pending</p>
+              <p style={{fontSize:'11px',marginTop:'4px'}}>Semua surat telah diproses</p>
+            </div>
+          ) : (
+            <div>
+              <div style={{marginBottom:'12px',fontSize:'12px',color:'var(--text-secondary)'}}>
+                <strong>{pendingLetters.length} surat</strong> menunggu persetujuan Sekretaris
+              </div>
+              {pendingLetters.map(lt=>(
+                <div key={lt.id} className="approval-item">
+                  <div className="approval-item-info">
+                    <div className="approval-ref">{lt.ref}</div>
+                    <div className="approval-subject">{lt.subject}</div>
+                    <div className="approval-meta">Kepada: {lt.to} · {lt.date?formatDate(lt.date):''}</div>
+                    <div style={{marginTop:'4px'}}><span className={`badge badge-${lt.type==='UND'?'blue':lt.type==='AUD'?'green':'amber'}`}>{typeObj(lt.type).label}</span></div>
+                  </div>
+                  <div style={{display:'flex',gap:'6px',flexShrink:0}}>
+                    <button className="btn btn-ghost btn-sm" onClick={()=>{setSelectedLetter(lt);setShowPreview(true);}}>👁 Preview</button>
+                    <button className="btn btn-success btn-sm" onClick={()=>handleApprove(lt.id)} id={`btn-approve-${lt.id}`}>✓ ACC & Tanda Tangani</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {tab==='archive' && (
+        <div className="fade-in">
+          <div className="card">
+            <div className="card-header">
+              <div className="card-title">🗂️ Arsip Surat Keluar</div>
+              <span className="badge badge-gray">{letters.length} Total Surat</span>
+            </div>
+            <div className="table-wrapper">
+              <table>
+                <thead>
+                  <tr><th>No. Surat</th><th>Perihal</th><th>Kepada</th><th>Tanggal</th><th>Jenis</th><th>Status</th><th>Aksi</th></tr>
+                </thead>
+                <tbody>
+                  {[...letters].reverse().map(lt=>(
+                    <tr key={lt.id}>
+                      <td style={{fontFamily:'monospace',fontSize:'10px',fontWeight:'700',color:'var(--accent-blue)'}}>{lt.ref}</td>
+                      <td style={{maxWidth:'200px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{lt.subject}</td>
+                      <td style={{fontSize:'11px',color:'var(--text-secondary)',maxWidth:'150px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{lt.to}</td>
+                      <td style={{fontSize:'11px',whiteSpace:'nowrap'}}>{lt.date?formatDate(lt.date):''}</td>
+                      <td><span className={`badge badge-${lt.type==='UND'?'blue':lt.type==='AUD'?'green':'amber'}`} style={{fontSize:'9px'}}>{typeObj(lt.type).label}</span></td>
+                      <td><span className={`badge ${lt.status==='ACC'?'badge-green':'badge-amber'}`}>{lt.status==='ACC'?'✓ ACC':'⏳ Pending'}</span></td>
+                      <td><button className="btn btn-ghost btn-xs" onClick={()=>{setSelectedLetter(lt);setShowPreview(true);}}>Preview</button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Letter Preview Modal */}
+      {showPreview && selectedLetter && (
+        <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&setShowPreview(false)}>
+          <div className="modal fade-in" style={{width:'620px'}}>
+            <div className="modal-header">
+              <div className="modal-title">Preview Surat — {selectedLetter.ref}</div>
+              <button className="modal-close" onClick={()=>setShowPreview(false)}>×</button>
+            </div>
+            <div style={{padding:'16px',overflowY:'auto',maxHeight:'75vh'}}>
+              <div className="letter-preview" style={{position:'relative',padding:'32px',fontSize:'11px',lineHeight:'1.8'}}>
+                {selectedLetter.status==='ACC' && <div className="acc-stamp">RESMI ACC</div>}
+                <div className="letter-header">
+                  <div className="letter-logo">FG</div>
+                  <div>
+                    <div className="letter-org-name">FORUM GENRE KOTA DEPOK</div>
+                    <div className="letter-org-sub">Jl. Margonda Raya No.54 Depok | Telp. (021) 77820XX</div>
+                  </div>
+                </div>
+                <table className="letter-ref-table" style={{marginBottom:'16px'}}>
+                  <tbody>
+                    <tr><td style={{width:'90px',fontWeight:'600'}}>Nomor</td><td style={{width:'10px'}}>:</td><td style={{fontFamily:'monospace',fontWeight:'700'}}>{selectedLetter.ref}</td></tr>
+                    <tr><td style={{fontWeight:'600'}}>Lampiran</td><td>:</td><td>—</td></tr>
+                    <tr><td style={{fontWeight:'600'}}>Perihal</td><td>:</td><td style={{fontWeight:'600'}}>{selectedLetter.subject}</td></tr>
+                  </tbody>
+                </table>
+                <div style={{marginBottom:'16px'}}>
+                  <div>Kepada Yth.</div>
+                  <div style={{fontWeight:'700'}}>{selectedLetter.to}</div>
+                  <div>di Tempat</div>
+                  <div style={{marginTop:'12px'}}>Dengan hormat,</div>
+                  <div style={{marginTop:'8px',textIndent:'2em'}}>Dalam rangka {selectedLetter.subject?.toLowerCase()}, kami dari Forum GenRe Kota Depok dengan hormat mengajukan surat ini kepada Bapak/Ibu. {selectedLetter.tujuan||''}</div>
+                  <div style={{marginTop:'8px',textIndent:'2em'}}>Demikian surat ini kami sampaikan. Atas perhatian dan kerja sama Bapak/Ibu, kami mengucapkan terima kasih.</div>
+                </div>
+                <div style={{display:'flex',justifyContent:'space-between',marginTop:'24px'}}>
+                  <div style={{textAlign:'center',minWidth:'140px'}}>
+                    <div style={{fontWeight:'700'}}>Sekretaris 1</div>
+                    <div style={{height:'50px',margin:'8px auto',width:'120px',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                      {selectedLetter.signedSek ? (
+                        <div className="sig-injected">~ Dina Kartika S. ~</div>
+                      ) : (
+                        <div style={{width:'100%',height:'40px',borderBottom:'1px solid #999'}}></div>
+                      )}
+                    </div>
+                    <div style={{fontWeight:'700'}}>Dina Kartika S.</div>
+                    <div style={{fontSize:'10px',color:'#666'}}>Sekretaris 1</div>
+                  </div>
+                  <div style={{textAlign:'center',minWidth:'140px'}}>
+                    <div style={{fontWeight:'700'}}>Ketua Umum</div>
+                    <div style={{height:'50px',margin:'8px auto',width:'120px',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                      {selectedLetter.signedKetua ? (
+                        <div className="sig-injected">~ M. Rafli A. ~</div>
+                      ) : (
+                        <div style={{width:'100%',height:'40px',borderBottom:'1px solid #999'}}></div>
+                      )}
+                    </div>
+                    <div style={{fontWeight:'700'}}>Muhammad Rafli A.</div>
+                    <div style={{fontSize:'10px',color:'#666'}}>Ketua Umum</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              {selectedLetter.status==='Pending' && (
+                <button className="btn btn-success" onClick={()=>{ handleApprove(selectedLetter.id); }}>✓ ACC & Tanda Tangani</button>
+              )}
+              <button className="btn btn-ghost" onClick={()=>notify('Download PDF berhasil','success')}>📥 Download PDF</button>
+              <button className="btn btn-secondary" onClick={()=>setShowPreview(false)}>Tutup</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MODULE 6: KEUANGAN RAB
+// ═══════════════════════════════════════════════════════════════
+function KeuanganModule({ notify }) {
+  const [transactions, setTransactions] = useState(INITIAL_TRANSACTIONS);
+  const [dragover, setDragover] = useState(false);
+  const [ocrLoading, setOcrLoading] = useState(false);
+  const [extracted, setExtracted] = useState(null);
+  const [form, setForm] = useState({ nominal:'', tanggal:'', kategori:'', deskripsi:'', type:'expense' });
+  const [tab, setTab] = useState('ledger');
+  const fileRef = useRef();
+
+  const mockOCR = [
+    { nominal:280000, tanggal:'2026-06-13', kategori:'Konsumsi', deskripsi:'Konsumsi Rapat Internal BPH - Nasi Box 14 porsi' },
+    { nominal:75000, tanggal:'2026-06-13', kategori:'ATK', deskripsi:'Print & Fotokopi Dokumen Administrasi' },
+    { nominal:450000, tanggal:'2026-06-12', kategori:'Transport', deskripsi:'Uang Transport Perwakilan ke BKKBN Pusat' },
+    { nominal:1200000, tanggal:'2026-06-10', kategori:'Lainnya', deskripsi:'Sewa Tempat Pelatihan Kader PIK-R' },
+  ];
+
+  const income = transactions.filter(t=>t.type==='income').reduce((s,t)=>s+t.nominal,0);
+  const expense = Math.abs(transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+t.nominal,0));
+  const balance = income - expense;
+
+  const simulateOCR = (fname) => {
+    setOcrLoading(true); setExtracted(null);
+    const mock = mockOCR[Math.floor(Math.random()*mockOCR.length)];
+    setTimeout(()=>{
+      setOcrLoading(false);
+      setExtracted(mock);
+      setForm({nominal:String(mock.nominal),tanggal:mock.tanggal,kategori:mock.kategori,deskripsi:mock.deskripsi,type:'expense'});
+      notify(`AI mengekstrak struk "${fname}" — data siap disimpan`,'success');
+    }, 1800);
+  };
+
+  const onDrop = (e) => { e.preventDefault();setDragover(false);const f=e.dataTransfer.files[0];if(f)simulateOCR(f.name); };
+  const onFileChange = (e) => { const f=e.target.files[0];if(f)simulateOCR(f.name); };
+
+  const handleSave = () => {
+    if(!form.nominal||!form.tanggal||!form.deskripsi) { notify('Lengkapi data transaksi','error'); return; }
+    const n = parseInt(form.nominal.replace(/\D/g,''))||0;
+    const newTx = {
+      id: Date.now(), date: form.tanggal,
+      desc: form.deskripsi, kategori: form.kategori,
+      nominal: form.type==='income'?n:-n, type: form.type
+    };
+    setTransactions(t=>[...t,newTx]);
+    setForm({nominal:'',tanggal:'',kategori:'',deskripsi:'',type:'expense'});
+    setExtracted(null);
+    notify('Transaksi berhasil disimpan ke buku besar','success');
+  };
+
+  const KATEGORI_LIST = ['Konsumsi','ATK','Transport','Sewa Tempat','Honor Narasumber','Dokumentasi','Lainnya','Pemasukan'];
+
+  return (
+    <div className="fade-in">
+      <div style={{marginBottom:'18px'}}>
+        <h1 style={{fontSize:'18px',fontWeight:'800'}}>Smart Keuangan RAB — Bendahara Hub</h1>
+        <p style={{fontSize:'12px',color:'var(--text-muted)',marginTop:'2px'}}>Manajemen keuangan & RAB kegiatan Forum GenRe Depok dengan OCR otomatis</p>
+      </div>
+
+      {/* Finance Summary */}
+      <div className="fin-summary" style={{marginBottom:'18px'}}>
+        <div className="fin-summary-grid">
+          <div className="fin-metric">
+            <div className="fin-metric-label">Total Pemasukan</div>
+            <div className="fin-metric-value income">{formatRupiah(income)}</div>
+            <div style={{fontSize:'10px',color:'rgba(255,255,255,0.35)',marginTop:'4px'}}>{transactions.filter(t=>t.type==='income').length} transaksi masuk</div>
+          </div>
+          <div className="fin-divider"></div>
+          <div className="fin-metric">
+            <div className="fin-metric-label">Total Pengeluaran</div>
+            <div className="fin-metric-value expense">- {formatRupiah(expense)}</div>
+            <div style={{fontSize:'10px',color:'rgba(255,255,255,0.35)',marginTop:'4px'}}>{transactions.filter(t=>t.type==='expense').length} transaksi keluar</div>
+          </div>
+          <div className="fin-divider"></div>
+          <div className="fin-metric">
+            <div className="fin-metric-label">Sisa Saldo</div>
+            <div className="fin-metric-value balance">{formatRupiah(balance)}</div>
+            <div style={{fontSize:'10px',color:balance>=0?'#6ee7b7':'#fca5a5',marginTop:'4px'}}>{balance>=0?'↑ Saldo Aman':'⚠ Saldo Minus'}</div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'360px 1fr',gap:'16px'}}>
+        {/* Upload & Form */}
+        <div>
+          <div className="card" style={{marginBottom:'12px'}}>
+            <div className="card-header"><div className="card-title">🧾 Upload Struk / Invoice</div></div>
+            <div className="card-body" style={{padding:'14px'}}>
+              <div
+                className={`dropzone${dragover?' dragover':''}`}
+                style={{padding:'20px'}}
+                onClick={()=>!ocrLoading&&fileRef.current.click()}
+                onDrop={onDrop}
+                onDragOver={e=>{e.preventDefault();setDragover(true);}}
+                onDragLeave={()=>setDragover(false)}
+              >
+                <input ref={fileRef} type="file" style={{display:'none'}} accept=".jpg,.jpeg,.png,.pdf" onChange={onFileChange} />
+                {ocrLoading ? (
+                  <div>
+                    <div className="dropzone-icon pulse">🤖</div>
+                    <div className="dropzone-text" style={{color:'var(--accent-blue)'}}>AI Membaca Struk...</div>
+                    <div style={{marginTop:'10px',height:'4px',background:'var(--border)',borderRadius:'2px',overflow:'hidden'}}>
+                      <div className="pulse" style={{height:'100%',background:'var(--accent-blue)',width:'60%'}}></div>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="dropzone-icon">🧾</div>
+                    <div className="dropzone-text">Upload Struk / Invoice</div>
+                    <div className="dropzone-sub">JPG, PNG, PDF — OCR otomatis</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-header">
+              <div className="card-title">➕ Input Transaksi Manual</div>
+              {extracted && <span className="badge badge-green">OCR Filled</span>}
+            </div>
+            <div className="card-body" style={{padding:'14px'}}>
+              {extracted && (
+                <div className="receipt-extracted">
+                  <div className="receipt-extracted-label">✓ Data dari OCR Struk</div>
+                  <div style={{fontSize:'11px',color:'var(--accent-blue)'}}>Nominal: <strong>{formatRupiah(extracted.nominal)}</strong></div>
+                  <div style={{fontSize:'11px',color:'var(--accent-blue)'}}>Kategori: <strong>{extracted.kategori}</strong></div>
+                </div>
+              )}
+              <div style={{display:'flex',gap:'6px',marginBottom:'12px'}}>
+                <button className={`btn btn-sm${form.type==='expense'?' btn-danger':' btn-ghost'}`} onClick={()=>setForm(f=>({...f,type:'expense'}))}>Pengeluaran</button>
+                <button className={`btn btn-sm${form.type==='income'?' btn-success':' btn-ghost'}`} onClick={()=>setForm(f=>({...f,type:'income'}))}>Pemasukan</button>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Nominal (Rp) *</label>
+                <input className="form-control" value={form.nominal} onChange={e=>setForm(f=>({...f,nominal:e.target.value}))} placeholder="contoh: 350000" style={{fontFamily:'monospace'}} />
+                {form.nominal && <div className="helper-text">{formatRupiah(parseInt(form.nominal.replace(/\D/g,''))||0)}</div>}
+              </div>
+              <div className="form-group">
+                <label className="form-label">Tanggal Transaksi *</label>
+                <input className="form-control" type="date" value={form.tanggal} onChange={e=>setForm(f=>({...f,tanggal:e.target.value}))} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Kategori</label>
+                <select className="form-control" value={form.kategori} onChange={e=>setForm(f=>({...f,kategori:e.target.value}))}>
+                  <option value="">— Pilih Kategori —</option>
+                  {KATEGORI_LIST.map(k=><option key={k}>{k}</option>)}
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Deskripsi *</label>
+                <textarea className="form-control" value={form.deskripsi} onChange={e=>setForm(f=>({...f,deskripsi:e.target.value}))} placeholder="Keterangan transaksi..." style={{minHeight:'60px'}} />
+              </div>
+              <button className="btn btn-primary w-full" onClick={handleSave} id="btn-simpan-transaksi">💾 Simpan ke Buku Besar</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Ledger */}
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title">📒 Buku Besar Keuangan</div>
+            <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
+              <span className="badge badge-gray">{transactions.length} Transaksi</span>
+              <button className="btn btn-ghost btn-sm" onClick={()=>notify('Laporan keuangan diekspor ke Excel','success')}>📊 Export</button>
+            </div>
+          </div>
+          <div className="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Deskripsi</th>
+                  <th>Kategori</th>
+                  <th style={{textAlign:'right'}}>Pemasukan</th>
+                  <th style={{textAlign:'right'}}>Pengeluaran</th>
+                  <th style={{textAlign:'right'}}>Saldo</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(() => {
+                  let running = 0;
+                  return [...transactions].sort((a,b)=>new Date(a.date)-new Date(b.date)).map(t => {
+                    running += t.nominal;
+                    return (
+                      <tr key={t.id}>
+                        <td style={{fontSize:'11px',whiteSpace:'nowrap'}}>{formatDate(t.date)}</td>
+                        <td style={{maxWidth:'200px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',fontSize:'11px'}}>{t.desc}</td>
+                        <td><span className={`badge ${t.type==='income'?'badge-green':'badge-gray'}`} style={{fontSize:'9px'}}>{t.kategori||t.type}</span></td>
+                        <td style={{textAlign:'right',fontFamily:'monospace',fontSize:'11px',color:'var(--accent-green)',fontWeight:'600'}}>{t.type==='income'?formatRupiah(t.nominal):'—'}</td>
+                        <td style={{textAlign:'right',fontFamily:'monospace',fontSize:'11px',color:'var(--accent-red)',fontWeight:'600'}}>{t.type==='expense'?formatRupiah(t.nominal):'—'}</td>
+                        <td style={{textAlign:'right',fontFamily:'monospace',fontSize:'11px',fontWeight:'700',color:running>=0?'var(--text-primary)':'var(--accent-red)'}}>{formatRupiah(running)}</td>
+                      </tr>
+                    );
+                  });
+                })()}
+              </tbody>
+            </table>
+          </div>
+          <div style={{padding:'12px 16px',borderTop:'1px solid var(--border)',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+            <span style={{fontSize:'11px',color:'var(--text-muted)'}}>{transactions.length} entri tercatat</span>
+            <div style={{display:'flex',gap:'16px'}}>
+              <div style={{textAlign:'right'}}>
+                <div style={{fontSize:'10px',color:'var(--text-muted)',textTransform:'uppercase',letterSpacing:'0.5px'}}>Net Balance</div>
+                <div style={{fontFamily:'monospace',fontWeight:'800',fontSize:'14px',color:balance>=0?'var(--accent-green)':'var(--accent-red)'}}>{formatRupiah(balance)}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MAIN APP
+// ═══════════════════════════════════════════════════════════════
+const NAV_ITEMS = [
+  { id:'dashboard', icon:'📅', label:'Dashboard & Kalender', section:'UTAMA' },
+  { id:'pikr', icon:'🏢', label:'Database PIK-R', section:'DATA' },
+  { id:'disposisi', icon:'🤖', label:'Smart Disposisi', section:'OPERASIONAL' },
+  { id:'tor', icon:'📝', label:'ToR & LPJ Generator', section:'OPERASIONAL' },
+  { id:'surat', icon:'✉️', label:'Persuratan Digital', section:'OPERASIONAL' },
+  { id:'keuangan', icon:'💰', label:'Keuangan RAB', section:'KEUANGAN' },
+];
+
+function App() {
+  const [activeModule, setActiveModule] = useState('dashboard');
+  const [notif, setNotif] = useState(null);
+  const notifTimer = useRef(null);
+
+  const notify = useCallback((msg, type='success') => {
+    setNotif({msg, type, id: Date.now()});
+    if(notifTimer.current) clearTimeout(notifTimer.current);
+    notifTimer.current = setTimeout(()=>setNotif(null), 3200);
+  }, []);
+
+  const sections = [...new Set(NAV_ITEMS.map(n=>n.section))];
+
+  const moduleProps = { notify };
+
+  const currentNav = NAV_ITEMS.find(n=>n.id===activeModule);
+
+  return (
+    <>
+      {notif && <Notification key={notif.id} msg={notif.msg} type={notif.type} onDone={()=>setNotif(null)} />}
+      {/* SIDEBAR */}
+      <nav className="sidebar" role="navigation" aria-label="Sidebar navigasi utama">
+        <div className="sidebar-logo">
+          <div className="sidebar-logo-badge">🌟 SIAT FGD</div>
+          <div className="sidebar-logo-title">Forum GenRe<br/>Kota Depok</div>
+          <div className="sidebar-logo-sub">Sistem Administrasi Terpadu</div>
+        </div>
+
+        {sections.map(sec=>{
+          const items = NAV_ITEMS.filter(n=>n.section===sec);
+          return (
+            <div key={sec}>
+              <div className="sidebar-section">{sec}</div>
+              <ul className="sidebar-nav">
+                {items.map(item=>(
+                  <li key={item.id}>
+                    <button
+                      className={`sidebar-nav-btn${activeModule===item.id?' active':''}`}
+                      onClick={()=>setActiveModule(item.id)}
+                      aria-current={activeModule===item.id?'page':undefined}
+                      id={`nav-${item.id}`}
+                    >
+                      <span className="nav-icon">{item.icon}</span>
+                      <span>{item.label}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+
+        <div className="sidebar-footer">
+          <div className="sidebar-user">
+            <div className="sidebar-avatar">MR</div>
+            <div>
+              <div className="sidebar-user-name">M. Rafli Awaludin</div>
+              <div className="sidebar-user-role">Ketua Umum · 2025–2026</div>
+            </div>
+          </div>
+          <div style={{marginTop:'12px',fontSize:'10px',color:'rgba(255,255,255,0.2)',textAlign:'center'}}>v2.0.0 · Juni 2026</div>
+        </div>
+      </nav>
+
+      {/* MAIN */}
+      <div className="main-wrapper">
+        <header className="topbar">
+          <div>
+            <div className="topbar-title">{currentNav?.icon} {currentNav?.label}</div>
+            <div className="topbar-sub">Forum GenRe Kota Depok · Sabtu, 13 Juni 2026 · 18:13 WIB</div>
+          </div>
+          <div className="topbar-actions">
+            <span className="topbar-badge">● Sistem Online</span>
+            <button className="btn btn-ghost btn-sm" onClick={()=>notify('Notifikasi: Tidak ada pembaruan baru','success')}>🔔</button>
+            <button className="btn btn-ghost btn-sm" onClick={()=>notify('Sesi berhasil diperbarui','success')}>⟳ Refresh</button>
+          </div>
+        </header>
+
+        <main className="content-area" role="main">
+          {activeModule === 'dashboard'   && <CalendarModule {...moduleProps} />}
+          {activeModule === 'pikr'        && <PIKRModule {...moduleProps} />}
+          {activeModule === 'disposisi'   && <DisposisiModule {...moduleProps} />}
+          {activeModule === 'tor'         && <TORModule {...moduleProps} />}
+          {activeModule === 'surat'       && <PersurataModule {...moduleProps} />}
+          {activeModule === 'keuangan'    && <KeuanganModule {...moduleProps} />}
+        </main>
+      </div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
